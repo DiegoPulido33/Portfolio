@@ -1,16 +1,38 @@
 ---
-
+import "../styles/global.css";
+import GalaxyCanvas from "../components/GalaxyCanvas.astro";
+import KyberMenu from "../components/KyberMenu.astro";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Portfolio Galaxy</title>
+  </head>
+
+  <body>
+    <GalaxyCanvas />
+
+    <!-- SABLE -->
+    <img
+      id="lightsaber-cursor"
+      src="/sabers/saber-blue.png"
+      alt="Lightsaber cursor"
+    />
+
+    <KyberMenu />
+
+    <!-- PORTALES -->
+    <div id="portal-container">
+      <div class="portal"><span>Sobre mí</span></div>
+      <div class="portal"><span>Proyectos</span></div>
+      <div class="portal"><span>Ideas Futuras</span></div>
+      <div class="portal"><span>Contacto</span></div>
+    </div>
+
+    <script>
+      import "../scenes/MainLightsaberCursor.ts";
+    </script>
+  </body>
 </html>

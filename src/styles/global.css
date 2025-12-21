@@ -1,0 +1,136 @@
+/* Ocultar cursor normal */
+body {
+  cursor: none !important;
+}
+
+.kyber-menu,
+.kyber-panel,
+.menu-handle {
+  cursor: none !important;
+}
+
+/* === CONTENEDOR DE PORTALES === */
+#portal-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  z-index: 9000;
+}
+
+/* === PORTAL GALÁCTICO === */
+.portal {
+  width: 320px;
+  height: 70px;
+  border-radius: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: none !important;
+  user-select: none;
+
+  background: rgba(0, 20, 30, 0.3);
+  border: 2px solid rgba(0, 255, 255, 0.35);
+
+  box-shadow:
+    0 0 10px rgba(0, 255, 255, 0.15),
+    inset 0 0 18px rgba(0, 255, 255, 0.1);
+
+  backdrop-filter: blur(6px);
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Texto holográfico */
+.portal span {
+  color: #bff9ff;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-shadow: 0 0 6px rgba(0, 255, 255, 0.6);
+}
+
+/* Hover */
+.portal:hover {
+  border-color: rgb(0, 255, 255);
+  box-shadow:
+    0 0 25px rgba(0, 255, 255, 0.6),
+    inset 0 0 25px rgba(0, 255, 255, 0.3);
+  transform: scale(1.04);
+}
+
+/* Scan */
+.portal::before {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    rgba(0,255,255,0.03),
+    rgba(0,255,255,0.15),
+    rgba(0,255,255,0.03)
+  );
+  animation: portal-scan 3s infinite linear;
+  pointer-events: none;
+}
+
+@keyframes portal-scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(200%); }
+}
+
+/* === PORTAL ACTIVO (sable encima) === */
+.portal.portal--active {
+  border-color: rgb(0, 255, 255);
+  box-shadow:
+    0 0 35px rgba(0, 255, 255, 0.9),
+    inset 0 0 30px rgba(0, 255, 255, 0.5);
+  transform: scale(1.06);
+}
+
+
+/* === SABLE === */
+#lightsaber-cursor {
+  position: fixed;
+  width: 42px;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%) rotate(-12deg);
+  z-index: 10000;
+  display: none;
+
+  filter:
+    drop-shadow(0 0 6px rgba(0,255,255,0.8))
+    drop-shadow(0 0 14px rgba(0,255,255,0.5));
+
+  animation: saberPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes saberPulse {
+  0% {
+    filter:
+      drop-shadow(0 0 6px rgba(0,255,255,0.6))
+      drop-shadow(0 0 12px rgba(0,255,255,0.4));
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 10px rgba(0,255,255,1))
+      drop-shadow(0 0 20px rgba(0,255,255,0.8));
+  }
+  100% {
+    filter:
+      drop-shadow(0 0 6px rgba(0,255,255,0.6))
+      drop-shadow(0 0 12px rgba(0,255,255,0.4));
+  }
+}
+
+
