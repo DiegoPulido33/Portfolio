@@ -1,0 +1,57 @@
+<div class="kyber-menu">
+  <div class="menu-handle">
+    <div class="arrow"></div>
+  </div>
+
+  <div class="kyber-panel metal-jedi">
+    <img src="/crystals/kyber-blue.png" class="kyber-crystal" data-color="blue" />
+    <img src="/crystals/kyber-green.png" class="kyber-crystal" data-color="green" />
+    <img src="/crystals/kyber-red.png" class="kyber-crystal" data-color="red" />
+    <img src="/crystals/kyber-purple.png" class="kyber-crystal" data-color="purple" />
+    <img src="/crystals/kyber-yellow.png" class="kyber-crystal" data-color="yellow" />
+  </div>
+</div>
+
+<script is:inline>
+  const saber = document.getElementById("lightsaber-cursor");
+
+  if (!saber) {
+    console.error("[KyberMenu] No existe #lightsaber-cursor");
+  }
+
+  const saberPaths = {
+    blue: "/sabers/saber-blue.png",
+    green: "/sabers/saber-green.png",
+    red: "/sabers/saber-red.png",
+    purple: "/sabers/saber-purple.png",
+    yellow: "/sabers/saber-yellow.png",
+  };
+
+  let currentColor = "blue";
+
+  function playIgnition() {
+    const audio = new Audio("/audio/lightsaber/lightsaber-ignition.mp3");
+    audio.volume = 1;
+    audio.play().catch(() => {});
+  }
+
+  document.querySelectorAll(".kyber-crystal").forEach((el) => {
+    el.addEventListener("click", () => {
+      const color = el.dataset.color;
+      if (!color || color === currentColor) return;
+
+      // 🔥 CAMBIO DE COLOR
+      saber.src = saberPaths[color];
+      currentColor = color;
+
+      
+      playIgnition();
+
+      console.log("[KyberMenu] Color cambiado a", color);
+    });
+  });
+</script>
+
+<style>
+  @import "./KyberMenu.css";
+</style>
