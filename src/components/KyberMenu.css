@@ -83,7 +83,7 @@
 }
 
 /* Hover */
-.kyber-crystal:hover {
+.kyber-crystal:hover { 
   opacity: 1;
   transform: scale(1.15) rotateZ(8deg);
   filter: drop-shadow(0 0 14px rgba(0,255,255,0.9));
