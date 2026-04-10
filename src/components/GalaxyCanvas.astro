@@ -1,18 +1,19 @@
 <canvas id="galaxy-canvas"></canvas>
 
-<script type="module">
-  import { initGalaxyScene } from '../src/scenes/MainGalaxyScene';
+<script>
+  import { initGalaxyScene } from '../scenes/MainGalaxyScene';
+
   initGalaxyScene();
 </script>
 
 <style>
   canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  display: block;
-  z-index: 1;
-}
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: block;
+    z-index: 1;
+  }
 </style>
