@@ -2,8 +2,9 @@
 import "../styles/global.css";
 import GalaxyCanvas from "../components/GalaxyCanvas.astro";
 import KyberMenu from "../components/KyberMenu.astro";
-import IntroOverlay from "../components/IntroOverlay.astro";
-
+import CockpitIntro from "../components/CockpitIntro.astro";
+import HoloPlanetCanvas from "../components/HoloPlanetCanvas.astro";
+import SystemControls from "../components/SystemControls.astro";
 ---
 
 <!doctype html>
@@ -23,20 +24,56 @@ import IntroOverlay from "../components/IntroOverlay.astro";
       alt="Lightsaber cursor"
     />
 
-    <IntroOverlay />
+    <!-- INTRO -->
+    <CockpitIntro />
 
-    <KyberMenu />
+    <!-- UI OCULTA AL INICIO -->
+    <div id="main-ui">
+      <KyberMenu />
+      <SystemControls />
 
-    <!-- PORTALES -->
-    <div id="portal-container">
-      <div class="portal"><span>Sobre mí</span></div>
-      <div class="portal"><span>Proyectos</span></div>
-      <div class="portal"><span>Ideas Futuras</span></div>
-      <div class="portal"><span>Contacto</span></div>
+      <div id="portal-container" class="bridge-hub">
+        <div class="bridge-window"></div>
+
+        <div class="bridge-table">
+          <div class="bridge-table__surface"></div>
+
+          <div class="holo-core">
+            <HoloPlanetCanvas />
+
+            <button class="orbit-node orbit-node--about">
+              <span class="orbit-node__pulse"></span>
+              <span class="orbit-node__label">Sobre mí</span>
+            </button>
+
+            <button class="orbit-node orbit-node--projects">
+              <span class="orbit-node__pulse"></span>
+              <span class="orbit-node__label">Proyectos</span>
+            </button>
+
+            <button class="orbit-node orbit-node--future">
+              <span class="orbit-node__pulse"></span>
+              <span class="orbit-node__label">Ideas Futuras</span>
+            </button>
+
+            <button class="orbit-node orbit-node--contact">
+              <span class="orbit-node__pulse"></span>
+              <span class="orbit-node__label">Contacto</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        import "../scenes/MainLightsaberCursor.ts";
+
+        const mainUi = document.getElementById("main-ui");
+
+        window.addEventListener("cockpit:intro-finished", () => {
+          if (!mainUi) return;
+          mainUi.classList.add("main-ui-visible");
+        });
+      </script>
     </div>
-
-    <script>
-      import "../scenes/MainLightsaberCursor.ts";
-    </script>
   </body>
 </html>

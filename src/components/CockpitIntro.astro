@@ -1,0 +1,519 @@
+<div class="cockpit-intro" id="cockpit-intro" data-state="idle">
+  <div class="cockpit-intro__image" id="cockpit-intro-image"></div>
+  <div class="cockpit-intro__glass"></div>
+  <div class="cockpit-intro__velocity"></div>
+  <div class="cockpit-intro__streaks"></div>
+  <div class="cockpit-intro__light"></div>
+  <div class="cockpit-intro__hud"></div>
+  <div class="cockpit-intro__hint">Click to continue</div>
+</div>
+
+<style>
+  /* =========================================================
+     CUSTOM PROPERTY PARA LA MÁSCARA DE REVEAL
+     ---------------------------------------------------------
+     Esta variable controla el radio del "agujero" que se abre
+     desde el centro cuando termina el zoom.
+  ========================================================= */
+  @property --reveal-size {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 0px;
+  }
+
+  /* =========================================================
+     CONTENEDOR PRINCIPAL DE LA INTRO
+  ========================================================= */
+  .cockpit-intro {
+    --reveal-size: 0px;
+
+    position: fixed;
+    inset: 0;
+    z-index: 20000;
+    overflow: hidden;
+    cursor: pointer;
+    background: #000;
+    opacity: 1;
+
+    /* Optimización de render */
+    will-change:
+      opacity,
+      transform,
+      mask-image,
+      -webkit-mask-image;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+
+    /* Estado base: sin máscara */
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+
+  /* =========================================================
+     ESTADO: REVEAL
+     ---------------------------------------------------------
+     La intro se "perfora" desde el centro y el agujero
+     crece hasta cubrir toda la pantalla.
+  ========================================================= */
+  .cockpit-intro[data-state="reveal"] {
+    pointer-events: none;
+    
+    -webkit-mask-image: radial-gradient(
+      circle at 50% 50%,
+      transparent 0,
+      transparent var(--reveal-size),
+      black calc(var(--reveal-size) + 1px)
+    );
+    mask-image: radial-gradient(
+      circle at 50% 50%,
+      transparent 0,
+      transparent var(--reveal-size),
+      black calc(var(--reveal-size) + 1px)
+    );
+
+    animation: cockpitRevealOpen 4s linear forwards;
+  }
+
+  @keyframes cockpitRevealOpen {
+    from {
+      --reveal-size: 0px;
+    }
+    to {
+      /* suficientemente grande para llegar a todas las esquinas */
+      --reveal-size: 170vmax;
+    }
+  }
+
+  /* =========================================================
+     CAPAS
+  ========================================================= */
+  .cockpit-intro__image,
+  .cockpit-intro__glass,
+  .cockpit-intro__velocity,
+  .cockpit-intro__streaks,
+  .cockpit-intro__light,
+  .cockpit-intro__hud {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* =========================================================
+     IMAGEN PRINCIPAL DEL COCKPIT
+  ========================================================= */
+  .cockpit-intro__image {
+    background-image: url("/intro/cockpit-intro.webp");
+    background-size: auto 105vh;
+    background-position: center center;
+    background-repeat: no-repeat;
+    transform-origin: 50% 50%;
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  /* =========================================================
+     CAPA GLASS / HUD
+  ========================================================= */
+  .cockpit-intro__glass,
+  .cockpit-intro__hud {
+    pointer-events: none;
+  }
+
+  /* =========================================================
+     VIÑETA LATERAL / EFECTO VELOCIDAD
+  ========================================================= */
+  .cockpit-intro__velocity {
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.95) 0%,
+      rgba(0, 0, 0, 0.7) 12%,
+      rgba(0, 0, 0, 0) 25%,
+      rgba(0, 0, 0, 0) 75%,
+      rgba(0, 0, 0, 0.7) 88%,
+      rgba(0, 0, 0, 0.95) 100%
+    );
+  }
+
+  /* =========================================================
+     RAYAS DE VELOCIDAD
+  ========================================================= */
+  .cockpit-intro__streaks {
+    pointer-events: none;
+    opacity: 0.38;
+    background: repeating-linear-gradient(
+      180deg,
+      rgba(170, 230, 255, 0) 0px,
+      rgba(170, 230, 255, 0) 18px,
+      rgba(170, 230, 255, 0.1) 19px,
+      rgba(255, 255, 255, 0.16) 20px,
+      rgba(170, 230, 255, 0.1) 21px,
+      rgba(170, 230, 255, 0) 24px,
+      rgba(170, 230, 255, 0) 42px
+    );
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 1) 12%,
+      rgba(0, 0, 0, 0) 28%,
+      rgba(0, 0, 0, 0) 72%,
+      rgba(0, 0, 0, 1) 88%,
+      rgba(0, 0, 0, 1) 100%
+    );
+    mask-image: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 1) 12%,
+      rgba(0, 0, 0, 0) 28%,
+      rgba(0, 0, 0, 0) 72%,
+      rgba(0, 0, 0, 1) 88%,
+      rgba(0, 0, 0, 1) 100%
+    );
+    animation: cockpitStreaksDrift 7s linear infinite;
+  }
+
+  @keyframes cockpitStreaksDrift {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 0 120px;
+    }
+  }
+
+  /* Cuando está cargando/zooming, las streaks se aceleran */
+  .cockpit-intro[data-state="charging"] .cockpit-intro__streaks,
+  .cockpit-intro[data-state="holding"] .cockpit-intro__streaks {
+    opacity: 0.9;
+    animation: cockpitStreaksDriftFast 2s linear infinite;
+  }
+
+  @keyframes cockpitStreaksDriftFast {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 0 260px;
+    }
+  }
+
+  /* =========================================================
+     LUZ CENTRAL
+  ========================================================= */
+  .cockpit-intro__light {
+    pointer-events: none;
+    left: 50%;
+    top: 50%;
+    width: 320px;
+    height: 320px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.78) 0%,
+      rgba(190, 235, 255, 0.42) 18%,
+      rgba(120, 210, 255, 0.22) 36%,
+      rgba(90, 190, 255, 0.12) 52%,
+      rgba(0, 0, 0, 0) 72%
+    );
+    filter: blur(20px);
+    mix-blend-mode: screen;
+    animation: cockpitLightBreath 4s ease-in-out infinite;
+    will-change: transform, opacity, filter;
+  }
+
+  @keyframes cockpitLightBreath {
+    0% {
+      opacity: 0.52;
+      transform: translate(-50%, -50%) scale(0.96);
+    }
+    50% {
+      opacity: 0.95;
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+    100% {
+      opacity: 0.52;
+      transform: translate(-50%, -50%) scale(0.96);
+    }
+  }
+
+  .cockpit-intro[data-state="charging"] .cockpit-intro__light,
+  .cockpit-intro[data-state="holding"] .cockpit-intro__light {
+    animation-duration: 1.4s;
+    filter: blur(26px);
+    opacity: 1;
+  }
+
+  /* =========================================================
+     TEXTO "CLICK TO CONTINUE"
+  ========================================================= */
+  .cockpit-intro__hint {
+    position: absolute;
+    left: 50%;
+    top: 61%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    color: rgba(245, 250, 255, 0.98);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    text-align: center;
+    text-shadow:
+      0 0 8px rgba(255, 255, 255, 0.35),
+      0 0 18px rgba(120, 220, 255, 0.45),
+      0 0 34px rgba(120, 220, 255, 0.18);
+    pointer-events: none;
+    animation: cockpitHintPulse 4s ease-in-out infinite;
+    will-change: transform, opacity, filter;
+  }
+
+  @keyframes cockpitHintPulse {
+    0% {
+      opacity: 0.78;
+      transform: translate(-50%, -50%) scale(0.98);
+    }
+    50% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.028);
+    }
+    100% {
+      opacity: 0.78;
+      transform: translate(-50%, -50%) scale(0.98);
+    }
+  }
+
+  .cockpit-intro[data-state="charging"] .cockpit-intro__hint,
+  .cockpit-intro[data-state="holding"] .cockpit-intro__hint,
+  .cockpit-intro[data-state="reveal"] .cockpit-intro__hint {
+    animation: cockpitHintExit 0.8s ease forwards;
+  }
+
+  @keyframes cockpitHintExit {
+    0% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+      letter-spacing: 0.24em;
+      filter: blur(0px);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.82);
+      letter-spacing: 0.08em;
+      filter: blur(2px);
+    }
+  }
+
+  /* =========================================================
+     ACCESIBILIDAD / MÓVIL
+  ========================================================= */
+  @media (prefers-reduced-motion: reduce) {
+    .cockpit-intro,
+    .cockpit-intro * {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .cockpit-intro__image {
+      background-size: cover;
+    }
+
+    .cockpit-intro__hint {
+      font-size: 14px;
+      letter-spacing: 0.16em;
+      top: 64%;
+    }
+  }
+</style>
+
+<script>
+  (() => {
+    window.__portfolioAudioLocked = true;
+
+    const intro = document.getElementById("cockpit-intro");
+    const image = document.getElementById("cockpit-intro-image");
+
+    if (!intro || !image) return;
+
+    /* =======================================================
+       CONFIG
+       -------------------------------------------------------
+       Ajusta aquí la intensidad general de la animación
+    ======================================================= */
+    const CONFIG = {
+      zoomDuration: 2800, // duración del zoom principal
+      holdDuration: 450, // pausa corta antes de abrir la máscara
+      revealDuration: 4000, // debe coincidir con la animación CSS
+      parallaxX: 18, // desplazamiento horizontal por ratón
+      parallaxY: 11, // desplazamiento vertical por ratón
+      rotX: 2.1, // inclinación vertical
+      rotY: 3.4, // inclinación horizontal
+      lerpMove: 0.075, // suavidad de movimiento
+      lerpRotate: 0.07, // suavidad de rotación
+      zoomScale: 0.88, // cuánto hace zoom la imagen
+      zoomLift: 8.5, // cuánto sube la cámara durante el zoom (vh)
+    };
+
+    /* =======================================================
+       ESTADO INTERNO
+    ======================================================= */
+    let rafId = 0;
+    let pointerX = 0;
+    let pointerY = 0;
+
+    let currentX = 0;
+    let currentY = 0;
+    let currentRotX = 0;
+    let currentRotY = 0;
+
+    let phase = "idle"; // idle | charging | holding | reveal | done
+    let phaseStart = 0;
+
+    /* =======================================================
+       HELPERS
+    ======================================================= */
+    const clamp = (value: number, min: number, max: number) =>
+      Math.max(min, Math.min(max, value));
+
+    const lerp = (start: number, end: number, amount: number) =>
+      start + (end - start) * amount;
+
+    // Smoothstep mejorado para una interpolación más cinematográfica
+    const smoothStep = (t: number) => t * t * (3 - 2 * t);
+
+    const smootherStep = (t: number) => t * t * t * (t * (t * 6 - 15) + 10);
+
+    /* =======================================================
+       POINTER / PARALLAX
+    ======================================================= */
+    function handlePointerMove(event: { clientX: number; clientY: number }) {
+      const x = (event.clientX / window.innerWidth) * 2 - 1;
+      const y = (event.clientY / window.innerHeight) * 2 - 1;
+
+      pointerX = clamp(x, -1, 1);
+      pointerY = clamp(y, -1, 1);
+    }
+
+    /* =======================================================
+       CLICK -> INICIA ZOOM
+    ======================================================= */
+    function startIntro() {
+      if (phase !== "idle" || !intro) return;
+
+      phase = "charging";
+      phaseStart = performance.now();
+      intro.setAttribute("data-state", "charging");
+    }
+
+    /* =======================================================
+       CUANDO TERMINA LA ANIMACIÓN DE REVEAL
+       quitamos la intro completamente del DOM
+    ======================================================= */
+    function handleRevealEnd(event: { animationName: string }) {
+      if (event.animationName !== "cockpitRevealOpen") return;
+
+      phase = "done";
+      cancelAnimationFrame(rafId);
+
+      if (intro) {
+        intro.removeEventListener("animationend", handleRevealEnd);
+        intro.removeEventListener("click", startIntro);
+        intro.remove();
+      }
+      window.removeEventListener("pointermove", handlePointerMove);
+    }
+
+    /* =======================================================
+       BUCLE PRINCIPAL
+    ======================================================= */
+    function render(now: number) {
+      if (phase === "done" || !image) return;
+
+      let zoomProgress = 0;
+      let zoomEase = 0;
+      let zoomScale = 1;
+      let zoomTranslateY = 0;
+
+      if (phase === "charging") {
+        const raw = clamp((now - phaseStart) / CONFIG.zoomDuration, 0, 1);
+        zoomProgress = raw;
+        zoomEase = smootherStep(raw);
+
+        zoomScale = 1 + zoomEase * CONFIG.zoomScale;
+        zoomTranslateY = -zoomEase * CONFIG.zoomLift;
+
+        if (raw >= 1) {
+          phase = "holding";
+          phaseStart = now;
+          if (intro) {
+            intro.setAttribute("data-state", "holding");
+          }
+        }
+      } else if (phase === "holding") {
+        // Mantener el último frame del zoom durante una pausa breve
+        zoomProgress = 1;
+        zoomEase = 1;
+        zoomScale = 1 + CONFIG.zoomScale;
+        zoomTranslateY = -CONFIG.zoomLift;
+
+        if (now - phaseStart >= CONFIG.holdDuration) {
+          phase = "reveal";
+          phaseStart = now;
+
+          if (intro) {
+            intro.setAttribute("data-state", "reveal");
+          }
+
+          window.__portfolioAudioLocked = false;
+          window.dispatchEvent(new CustomEvent("cockpit:intro-finished"));
+        }
+
+      } else if (phase === "reveal") {
+        // Durante el reveal mantenemos la imagen ya zoomeada
+        zoomProgress = 1;
+        zoomEase = 1;
+        zoomScale = 1 + CONFIG.zoomScale;
+        zoomTranslateY = -CONFIG.zoomLift;
+      }
+
+      /* =====================================================
+         PARALLAX
+         -----------------------------------------------------
+         Se sigue aplicando durante toda la intro para que no
+         se "congele" antes de desaparecer.
+      ===================================================== */
+      const targetX = pointerX * CONFIG.parallaxX;
+      const targetY = pointerY * CONFIG.parallaxY;
+      const targetRotY = pointerX * CONFIG.rotY;
+      const targetRotX = -pointerY * CONFIG.rotX;
+
+      currentX = lerp(currentX, targetX, CONFIG.lerpMove);
+      currentY = lerp(currentY, targetY, CONFIG.lerpMove);
+      currentRotX = lerp(currentRotX, targetRotX, CONFIG.lerpRotate);
+      currentRotY = lerp(currentRotY, targetRotY, CONFIG.lerpRotate);
+
+      image.style.transform = `
+        translate3d(${currentX}px, calc(${currentY}px + ${zoomTranslateY}vh), 0)
+        scale(${zoomScale})
+        rotateX(${currentRotX}deg)
+        rotateY(${currentRotY}deg)
+        translateZ(0)
+      `;
+
+      rafId = requestAnimationFrame(render);
+    }
+
+    /* =======================================================
+       INIT
+    ======================================================= */
+    window.addEventListener("pointermove", handlePointerMove, {
+      passive: true,
+    });
+    intro.addEventListener("click", startIntro);
+    intro.addEventListener("animationend", handleRevealEnd);
+
+    rafId = requestAnimationFrame(render);
+  })();
+</script>

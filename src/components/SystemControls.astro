@@ -1,0 +1,95 @@
+---
+import "../styles/SystemControls.css";
+---
+
+<div class="system-controls" id="system-controls">
+  <button
+    class="system-controls__action"
+    id="system-audio-toggle"
+    type="button"
+    aria-label="Activar o silenciar sonido"
+    data-state="on"
+    title="Sonido"
+  >
+    <span class="system-controls__icon system-controls__icon--audio-on">
+      <img src="/icons/audio_on.svg" alt="Audio On" />
+    </span>
+    <span class="system-controls__icon system-controls__icon--audio-off">
+      <img src="/icons/audio_off.svg" alt="Audio Off" />
+    </span>
+  </button>
+
+  <button
+    class="system-controls__action"
+    id="system-motion-toggle"
+    type="button"
+    aria-label="Pausar o reanudar animación"
+    data-state="running"
+    title="Animación"
+  >
+    <span class="system-controls__icon system-controls__icon--motion-on">
+      <img src="/icons/Rebel_Icon.svg" alt="Rebel Symbol" />
+    </span>
+    <span class="system-controls__icon system-controls__icon--motion-off">
+      <img src="/icons/Empire_Icon.svg" alt="Empire Symbol" />
+    </span>
+  </button>
+</div>
+
+<script is:inline>
+  (() => {
+    const root = document.getElementById("system-controls");
+    const audioToggle = document.getElementById("system-audio-toggle");
+    const motionToggle = document.getElementById("system-motion-toggle");
+
+    if (!root || !audioToggle || !motionToggle) return;
+
+    let audioEnabled = true;
+    let motionEnabled = true;
+
+    function syncUI() {
+      audioToggle.setAttribute("data-state", audioEnabled ? "on" : "off");
+      motionToggle.setAttribute(
+        "data-state",
+        motionEnabled ? "running" : "paused"
+      );
+    }
+
+    function emitAudioChange() {
+      window.dispatchEvent(
+        new CustomEvent("portfolio:audio-toggle", {
+          detail: { enabled: audioEnabled },
+        })
+      );
+    }
+
+    function emitMotionChange() {
+      window.dispatchEvent(
+        new CustomEvent("portfolio:motion-toggle", {
+          detail: { enabled: motionEnabled },
+        })
+      );
+    }
+
+    function handleAudioToggle(event) {
+      event.stopPropagation();
+      audioEnabled = !audioEnabled;
+      syncUI();
+      emitAudioChange();
+    }
+
+    function handleMotionToggle(event) {
+      event.stopPropagation();
+      motionEnabled = !motionEnabled;
+      syncUI();
+      emitMotionChange();
+    }
+
+    audioToggle.addEventListener("click", handleAudioToggle);
+    motionToggle.addEventListener("click", handleMotionToggle);
+
+    syncUI();
+    emitAudioChange();
+    emitMotionChange();
+  })();
+</script>
