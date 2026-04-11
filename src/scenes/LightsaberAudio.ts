@@ -112,7 +112,8 @@ function handleMouseMove(e: MouseEvent) {
     now - lastSwingTime > SWING_COOLDOWN
   ) {
     lastSwingTime = now;
-    playOneShot("/audio/lightsaber/lightsaber-swing.mp3", intensity);
+    const swingVolume = Math.min(intensity * 0.35, 0.35);
+    playOneShot("/audio/lightsaber/lightsaber-swing.mp3", swingVolume);
   }
 }
 
