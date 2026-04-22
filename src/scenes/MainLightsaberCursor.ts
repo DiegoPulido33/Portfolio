@@ -2,6 +2,9 @@
 import { ensureAudioReady } from "./LightsaberAudio";
 
 const TRAIL_COUNT = 8;
+const HOTSPOT_X = 14;   // distancia desde el borde izquierdo hasta la punta/focus real
+const HOTSPOT_Y = 6;   // distancia desde el borde superior hasta el punto de focus
+const SABER_ROTATION = -12;
 
 function initLightsaberCursor() {
   const saberEl = document.querySelector<HTMLImageElement>("#lightsaber-cursor");
@@ -13,6 +16,9 @@ function initLightsaberCursor() {
   }
 
   const saber = saberEl;
+
+  saber.style.transform = `translate(${-HOTSPOT_X}px, ${-HOTSPOT_Y}px) rotate(${SABER_ROTATION}deg)`;
+  saber.style.transformOrigin = `${HOTSPOT_X}px ${HOTSPOT_Y}px`;
 
   const isTouchLike =
     window.matchMedia("(pointer: coarse)").matches ||
@@ -60,8 +66,8 @@ function initLightsaberCursor() {
 
       trail.style.opacity = "0";
       trail.style.display = isTouchLike ? "none" : "block";
-      trail.style.transform = `translate(-50%, -50%) rotate(-12deg) scale(${scale})`;
-      trail.style.filter = `
+      trail.style.transform = `translate(${-HOTSPOT_X}px, ${-HOTSPOT_Y}px) rotate(${SABER_ROTATION}deg) scale(${scale})`;
+      trail.style.transformOrigin = `${HOTSPOT_X}px ${HOTSPOT_Y}px`; trail.style.filter = `
         blur(${blur}px)
         drop-shadow(0 0 4px rgba(0, 255, 255, ${opacity + 0.2}))
         drop-shadow(0 0 10px rgba(0, 255, 255, ${opacity}))
@@ -78,15 +84,17 @@ function initLightsaberCursor() {
   }
 
   function updatePortalHover() {
-    const saberRect = saber.getBoundingClientRect();
+    const tipX = currentX;
+    const tipY = currentY;
 
     portals.forEach((portal) => {
       const rect = portal.getBoundingClientRect();
+
       const isHovering =
-        saberRect.left < rect.right &&
-        saberRect.right > rect.left &&
-        saberRect.top < rect.bottom &&
-        saberRect.bottom > rect.top;
+        tipX >= rect.left &&
+        tipX <= rect.right &&
+        tipY >= rect.top &&
+        tipY <= rect.bottom;
 
       portal.classList.toggle("portal--active", isHovering);
     });

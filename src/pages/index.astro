@@ -1,10 +1,12 @@
 ---
 import "../styles/global.css";
+import "../styles/sections/experience.css";
+
 import GalaxyCanvas from "../components/GalaxyCanvas.astro";
 import KyberMenu from "../components/KyberMenu.astro";
 import CockpitIntro from "../components/CockpitIntro.astro";
-import HoloPlanetCanvas from "../components/HoloPlanetCanvas.astro";
 import SystemControls from "../components/SystemControls.astro";
+import ExperienceSection from "../components/sections/ExperienceSection.astro";
 ---
 
 <!doctype html>
@@ -27,38 +29,50 @@ import SystemControls from "../components/SystemControls.astro";
     <!-- INTRO -->
     <CockpitIntro />
 
-    <!-- UI OCULTA AL INICIO -->
+    <!-- UI / HUB -->
     <div id="main-ui">
       <KyberMenu />
       <SystemControls />
 
       <div id="portal-container" class="bridge-hub">
-        <div class="bridge-window"></div>
+        <div class="command-deck">
+          <div class="command-deck__platform"></div>
 
-        <div class="bridge-table">
-          <div class="bridge-table__surface"></div>
-
-          <div class="holo-core">
-            <HoloPlanetCanvas />
-
-            <button class="orbit-node orbit-node--about">
-              <span class="orbit-node__pulse"></span>
-              <span class="orbit-node__label">Sobre mí</span>
+          <div class="command-nav">
+            <button
+              class="command-node command-node--projects"
+              data-target="projects"
+            >
+              <span class="command-node__panel">
+                <span class="command-node__title">Proyectos</span>
+              </span>
             </button>
 
-            <button class="orbit-node orbit-node--projects">
-              <span class="orbit-node__pulse"></span>
-              <span class="orbit-node__label">Proyectos</span>
+            <button
+              class="command-node command-node--experience"
+              data-target="experience"
+            >
+              <span class="command-node__panel">
+                <span class="command-node__title">Experiencia</span>
+              </span>
             </button>
 
-            <button class="orbit-node orbit-node--future">
-              <span class="orbit-node__pulse"></span>
-              <span class="orbit-node__label">Ideas Futuras</span>
+            <button
+              class="command-node command-node--tech"
+              data-target="technologies"
+            >
+              <span class="command-node__panel">
+                <span class="command-node__title">Tecnologías</span>
+              </span>
             </button>
 
-            <button class="orbit-node orbit-node--contact">
-              <span class="orbit-node__pulse"></span>
-              <span class="orbit-node__label">Contacto</span>
+            <button
+              class="command-node command-node--contact"
+              data-target="contact"
+            >
+              <span class="command-node__panel">
+                <span class="command-node__title">Contacto</span>
+              </span>
             </button>
           </div>
         </div>
@@ -73,7 +87,31 @@ import SystemControls from "../components/SystemControls.astro";
           if (!mainUi) return;
           mainUi.classList.add("main-ui-visible");
         });
+
+        const commandNodes = document.querySelectorAll(
+          ".command-node[data-target]",
+        );
+
+        commandNodes.forEach((node) => {
+          node.addEventListener("click", () => {
+            const targetId = node.getAttribute("data-target");
+            if (!targetId) return;
+
+            const target = document.getElementById(targetId);
+            if (!target) return;
+
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          });
+        });
       </script>
     </div>
+
+    <!-- UNIVERSO DE SECCIONES -->
+    <main id="portfolio-universe">
+      <ExperienceSection />
+    </main>
   </body>
 </html>
