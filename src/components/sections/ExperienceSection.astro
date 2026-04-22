@@ -1,0 +1,72 @@
+---
+import { experienceContent } from "../../data/experienceContent";
+const { eyebrow, title, intro, identityStrip, timeline, closingNote } = experienceContent;
+---
+
+<section class="experience-zone" id="experience" data-zone="mission-archive">
+  <div class="experience-zone__shell">
+    <header class="experience-zone__header">
+      <p class="experience-zone__eyebrow">{eyebrow}</p>
+      <h2 class="experience-zone__title">{title}</h2>
+      <p class="experience-zone__intro">{intro}</p>
+    </header>
+
+    <div class="experience-identity">
+      <div class="experience-identity__item">
+        <span class="experience-identity__label">Role</span>
+        <strong class="experience-identity__value">{identityStrip.role}</strong>
+      </div>
+
+      <div class="experience-identity__item">
+        <span class="experience-identity__label">Focus</span>
+        <strong class="experience-identity__value">{identityStrip.focus}</strong>
+      </div>
+
+      <div class="experience-identity__item experience-identity__item--summary">
+        <span class="experience-identity__label">Profile</span>
+        <p class="experience-identity__summary">{identityStrip.summary}</p>
+      </div>
+    </div>
+
+    <div class="experience-timeline">
+      {
+        timeline.map((item) => (
+          <article class="experience-card">
+            <div class="experience-card__rail">
+              <span class="experience-card__node"></span>
+            </div>
+
+            <div class="experience-card__body">
+              <div class="experience-card__top">
+                <div>
+                  <p class="experience-card__company">{item.company}</p>
+                  <h3 class="experience-card__role">{item.role}</h3>
+                </div>
+
+                <div class="experience-card__meta">
+                  <span>{item.type}</span>
+                  <span>{item.period}</span>
+                  <span>{item.location}</span>
+                </div>
+              </div>
+
+              <p class="experience-card__summary">{item.summary}</p>
+
+              <ul class="experience-card__highlights">
+                {item.highlights.map((highlight) => <li>{highlight}</li>)}
+              </ul>
+
+              <div class="experience-card__stack">
+                {item.stack.map((tech) => <span class="experience-card__tag">{tech}</span>)}
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <footer class="experience-zone__footer">
+      <p>{closingNote}</p>
+    </footer>
+  </div>
+</section>
