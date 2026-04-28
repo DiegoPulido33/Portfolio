@@ -3,23 +3,19 @@ import "../styles/global.css";
 import "../styles/hub.css";
 import "../styles/sections/experience.css";
 
-import HudCard3D from "../components/HudCard3D";
-
 import GalaxyCanvas from "../components/GalaxyCanvas.astro";
 import KyberMenu from "../components/KyberMenu.astro";
-import CockpitIntro from "../components/CockpitIntro.astro";
 import SystemControls from "../components/SystemControls.astro";
+
+const { title = "Portfolio Diego Pulido Rivero" } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="es">
   <head>
-    <meta
-      charset="UTF-8"
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
-    <title>Portfolio Diego Pulido Rivero</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
   </head>
 
   <body>
@@ -31,88 +27,45 @@ import SystemControls from "../components/SystemControls.astro";
       alt="Lightsaber cursor"
     />
 
-    <CockpitIntro />
-
-    <div id="main-ui">
+    <div id="main-ui" class="main-ui-visible">
       <KyberMenu />
       <SystemControls />
+      <a class="hub-return" href="/hub" aria-label="Volver al hub"> HUB </a>
 
       <div id="portal-container" class="bridge-hub">
         <div class="hub-scene">
-          <!-- WINDOW -->
           <div class="holo-frame" aria-hidden="true">
             <div class="holo-frame__glass"></div>
 
-            <!-- Barra superior luminosa -->
             <div class="holo-frame__top-bar"></div>
             <div class="holo-frame__top-bar-light"></div>
 
-            <!-- Bordes principales luminosos -->
             <div class="holo-frame__edge holo-frame__edge--top"></div>
             <div class="holo-frame__edge holo-frame__edge--bottom"></div>
             <div class="holo-frame__edge holo-frame__edge--left"></div>
             <div class="holo-frame__edge holo-frame__edge--right"></div>
 
-            <!-- Raíles interiores -->
             <div class="holo-frame__rail holo-frame__rail--top"></div>
             <div class="holo-frame__rail holo-frame__rail--bottom"></div>
 
-            <!-- Esquinas afiladas sofisticadas -->
             <div class="holo-frame__corner holo-frame__corner--tl"></div>
             <div class="holo-frame__corner holo-frame__corner--tr"></div>
             <div class="holo-frame__corner holo-frame__corner--bl"></div>
             <div class="holo-frame__corner holo-frame__corner--br"></div>
 
-            <!-- Marcadores circulares en esquinas -->
             <div class="holo-frame__marker holo-frame__marker--tl"></div>
             <div class="holo-frame__marker holo-frame__marker--tr"></div>
             <div class="holo-frame__marker holo-frame__marker--bl"></div>
             <div class="holo-frame__marker holo-frame__marker--br"></div>
 
-            <!-- Ticks técnicos -->
             <div class="holo-frame__ticks holo-frame__ticks--top"></div>
             <div class="holo-frame__ticks holo-frame__ticks--bottom"></div>
           </div>
 
-          <!-- CARDS -->
-          <nav class="command-nav">
-            <HudCard3D
-              client:load
-              href="/projects"
-              title="PROYECTOS"
-              description={"EXPLORA MIS\nTRABAJOS\nDESTACADOS"}
-              image="/cards/card1.png"
-              alt="Núcleo holográfico de proyectos"
-            />
-            <HudCard3D
-              client:load
-              href="/experience"
-              title="EXPERIENCIA"
-              description={"CONOCE MI\nTRAYECTORIA\nPROFESIONAL"}
-              image="/cards/card2.png"
-              alt="Sistema holográfico de experiencia"
-            />
+          <div class="section-panel">
+            <slot />
+          </div>
 
-            <HudCard3D
-              client:load
-              href="/technologies"
-              title="TECNOLOGÍAS"
-              description={"STACK TÉCNICO\nHERRAMIENTAS\nY SISTEMAS"}
-              image="/cards/card3.png"
-              alt="Red holográfica de tecnologías"
-            />
-
-            <HudCard3D
-              client:load
-              href="/contact"
-              title="CONTACTO"
-              description={"HABLEMOS DE\nRETOS Y NUEVAS\nOPORTUNIDADES"}
-              image="/cards/card4.png"
-              alt="Baliza holográfica de contacto"
-            />
-          </nav>
-
-          <!-- BASE -->
           <div class="holo-stage" aria-hidden="true">
             <div class="holo-stage__projection"></div>
             <div class="holo-stage__beam"></div>
@@ -124,7 +77,7 @@ import SystemControls from "../components/SystemControls.astro";
             <div class="holo-stage__core-light"></div>
           </div>
         </div>
-        <!-- FLECHAS KYBER -->
+
         <div class="kyber-beacon" aria-hidden="true">
           <span class="kyber-arrow">
             <span></span>
@@ -132,16 +85,8 @@ import SystemControls from "../components/SystemControls.astro";
             <span></span>
           </span>
         </div>
-
         <script>
           import "../scenes/MainLightsaberCursor.ts";
-
-          const mainUi = document.getElementById("main-ui");
-
-          window.addEventListener("cockpit:intro-finished", () => {
-            if (!mainUi) return;
-            mainUi.classList.add("main-ui-visible");
-          });
         </script>
       </div>
     </div>
