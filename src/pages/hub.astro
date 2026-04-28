@@ -4,10 +4,8 @@ import "../styles/hub.css";
 import "../styles/sections/experience.css";
 
 import HudCard3D from "../components/HudCard3D";
-
 import GalaxyCanvas from "../components/GalaxyCanvas.astro";
 import KyberMenu from "../components/KyberMenu.astro";
-import CockpitIntro from "../components/CockpitIntro.astro";
 import SystemControls from "../components/SystemControls.astro";
 ---
 
@@ -31,9 +29,7 @@ import SystemControls from "../components/SystemControls.astro";
       alt="Lightsaber cursor"
     />
 
-    <CockpitIntro />
-
-    <div id="main-ui">
+    <div id="main-ui" class="main-ui-visible">
       <KyberMenu />
       <SystemControls />
 
@@ -131,18 +127,10 @@ import SystemControls from "../components/SystemControls.astro";
             <span></span>
             <span></span>
           </span>
+          <script>
+            import "../scenes/MainLightsaberCursor.ts";
+          </script>
         </div>
-
-        <script>
-          import "../scenes/MainLightsaberCursor.ts";
-
-          const mainUi = document.getElementById("main-ui");
-
-          window.addEventListener("cockpit:intro-finished", () => {
-            if (!mainUi) return;
-            mainUi.classList.add("main-ui-visible");
-          });
-        </script>
       </div>
     </div>
   </body>
