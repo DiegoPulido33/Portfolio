@@ -27,7 +27,31 @@
     yellow: "/sabers/saber-yellow.png",
   };
 
-  let currentColor = "blue";
+  const kyberRgb = {
+    blue: "103, 232, 249",
+    green: "34, 197, 94",
+    red: "239, 68, 68",
+    purple: "168, 85, 247",
+    yellow: "250, 204, 21",
+  };
+
+  const availableColors = Object.keys(saberPaths);
+
+  function getRandomColor() {
+    const randomIndex = Math.floor(Math.random() * availableColors.length);
+    return availableColors[randomIndex];
+  }
+
+  function applyKyberColor(color) {
+    if (!kyberRgb[color]) return;
+
+    document.documentElement.style.setProperty("--kyber-rgb", kyberRgb[color]);
+    document.documentElement.dataset.kyber = color;
+
+    if (saber) {
+      saber.src = saberPaths[color];
+    }
+  }
 
   function playIgnition() {
     const audio = new Audio("/audio/lightsaber/lightsaber-ignition.mp3");
@@ -35,15 +59,17 @@
     audio.play().catch(() => {});
   }
 
+  let currentColor = getRandomColor();
+
+  applyKyberColor(currentColor);
+
   document.querySelectorAll(".kyber-crystal").forEach((el) => {
     el.addEventListener("click", () => {
       const color = el.dataset.color;
       if (!color || color === currentColor) return;
 
-      // CAMBIO DE COLOR
-      saber.src = saberPaths[color];
       currentColor = color;
-
+      applyKyberColor(color);
       playIgnition();
     });
   });

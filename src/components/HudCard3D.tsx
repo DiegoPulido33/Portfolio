@@ -46,20 +46,21 @@ export default function HudCard3D({
       aria-label={title}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative z-50 block h-[360px] w-[225px] cursor-none"
+      className="hub-card-3d relative z-50 block h-[360px] w-[225px] cursor-none"
       style={{ perspective: "1000px" }}
     >
       <div
         className="
           group/card relative h-full w-full cursor-none
           overflow-hidden
-          border border-cyan-300/25
+          border border-[rgba(var(--kyber-rgb),0.25)]
           bg-[#020817]/92
           px-7 py-8
-          shadow-[inset_0_0_34px_rgba(34,211,238,0.08),0_0_24px_rgba(0,200,255,0.10)]
+          shadow-[inset_0_0_34px_rgba(var(--kyber-rgb),0.08),0_0_24px_rgba(var(--kyber-rgb),0.10)]
+
           transition-all duration-300 ease-out
-          hover:border-cyan-200/95
-          hover:shadow-[inset_0_0_52px_rgba(34,211,238,0.22),0_0_42px_rgba(34,211,238,0.38),0_0_90px_rgba(34,211,238,0.20)]
+          hover:border-[rgba(var(--kyber-rgb),0.95)]
+          hover:shadow-[inset_0_0_52px_rgba(var(--kyber-rgb),0.22),0_0_42px_rgba(var(--kyber-rgb),0.38),0_0_90px_rgba(var(--kyber-rgb),0.20)]
           [clip-path:polygon(16px_0,calc(100%-16px)_0,100%_16px,100%_calc(100%-16px),calc(100%-16px)_100%,16px_100%,0_calc(100%-16px),0_16px)]
         "
         style={{
@@ -70,10 +71,10 @@ export default function HudCard3D({
         <div
           className="
             pointer-events-none absolute inset-[5px]
-            border border-cyan-200/10
+            border border-[rgba(var(--kyber-rgb),0.10)]
             opacity-70
             transition-all duration-300
-            group-hover/card:border-cyan-100/65
+            group-hover/card:border-[rgba(var(--kyber-rgb),0.65)]
             group-hover/card:opacity-100
             [clip-path:inherit]
           "
@@ -86,7 +87,8 @@ export default function HudCard3D({
         />
 
         <div
-          className="pointer-events-none absolute left-1/2 top-[34%] h-[160px] w-[160px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-300/6 blur-xlg transition-all duration-300 group-hover/card:bg-cyan-300/10"
+          className="pointer-events-none absolute left-1/2 top-[34%] h-[160px] w-[160px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[rgba(var(--kyber-rgb),0.06)]
+          blur-xlg transition-all duration-300 group-hover/card:bg-[rgba(var(--kyber-rgb),0.10)]"
           style={{
             transform: "translateX(-50%) translateY(-50%) translateZ(10px)",
           }}
@@ -114,9 +116,9 @@ export default function HudCard3D({
     will-change-transform
     transform-gpu
     backface-visibility-hidden
-    drop-shadow-[0_0_6px_rgba(103,232,249,0.35)]
+    drop-shadow-[0_0_6px_rgba(var(--kyber-rgb),0.35)]
     transition-all duration-300
-    group-hover/card:drop-shadow-[0_0_12px_rgba(103,232,249,0.6)]
+    group-hover/card:drop-shadow-[0_0_12px_rgba(var(--kyber-rgb),0.6)]
   "
             style={{
               imageRendering: "auto",
@@ -130,7 +132,7 @@ export default function HudCard3D({
             relative z-10 mb-7 text-center
             text-[20px] font-black tracking-[0.06em]
             text-white
-            drop-shadow-[0_0_12px_rgba(103,232,249,0.75)]
+            drop-shadow-[0_0_12px_rgba(var(--kyber-rgb),0.75)]
           "
           style={{ transform: "translateZ(78px)" }}
         >
@@ -141,7 +143,7 @@ export default function HudCard3D({
           className="
             relative z-10 text-center
             text-[11px] font-bold leading-relaxed tracking-[0.04em]
-            text-cyan-100/90
+            text-[rgba(var(--kyber-rgb),0.90)]
           "
           style={{ transform: "translateZ(58px)" }}
         >
@@ -157,8 +159,8 @@ export default function HudCard3D({
           className="
             absolute bottom-8 left-1/2 z-20 block
             h-[4px] w-[64px] rounded-full
-            bg-cyan-300
-            shadow-[0_0_14px_rgba(103,232,249,1),0_0_32px_rgba(103,232,249,0.65)]
+            bg-[rgb(var(--kyber-rgb))]
+            shadow-[0_0_14px_rgba(var(--kyber-rgb),1),0_0_32px_rgba(var(--kyber-rgb),0.65)]
             transition-all duration-300
             group-hover/card:w-[90px]
           "

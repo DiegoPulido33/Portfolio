@@ -32,7 +32,7 @@
   color: cyan;
   font-size: 18px;
   opacity: 0.6;
-  transition: opacity .2s ease;
+  transition: opacity 0.2s ease;
 }
 
 .kyber-menu:hover .menu-handle .arrow {
@@ -65,35 +65,30 @@
    ======================= */
 
 .kyber-crystal {
-  width: 55px;             /* tamaño */
-  height: auto;            /* mantiene proporción */
-  opacity: 0.45;           /* holograma suave */
+  width: 55px; /* tamaño */
+  height: auto; /* mantiene proporción */
+  opacity: 0.45; /* holograma suave */
   cursor: none;
 
   /* Elimina lo que sobraba de los círculos */
   border: none !important;
   border-radius: 0 !important;
   background: none !important;
-  
+
   /* Animación real */
-  animation: floatSpin 6s linear infinite;
+  transform: translateY(0) scale(1);
+  filter: drop-shadow(0 0 6px rgba(var(--kyber-rgb), 0.35));
   transition: all 0.25s ease;
 
-  filter: drop-shadow(0 0 6px rgba(0,255,255,0.4));
+  filter: drop-shadow(0 0 6px rgba(0, 255, 255, 0.4));
 }
 
 /* Hover */
-.kyber-crystal:hover { 
+.kyber-crystal:hover {
   opacity: 1;
-  transform: scale(1.15) rotateZ(8deg);
-  filter: drop-shadow(0 0 14px rgba(0,255,255,0.9));
-}
-
-/* Animación */
-@keyframes floatSpin {
-  0%   { transform: rotateZ(0deg) translateY(0); }
-  50%  { transform: rotateZ(180deg) translateY(-8px); }
-  100% { transform: rotateZ(360deg) translateY(0); }
+  transform: translateX(10px) scale(1.12);
+  filter: drop-shadow(0 0 10px rgba(var(--kyber-rgb), 0.75))
+    drop-shadow(0 0 22px rgba(var(--kyber-rgb), 0.35));
 }
 
 /* === METAL JEDI ILUMINADO === */
@@ -101,8 +96,8 @@
   background: linear-gradient(180deg, #3a3f47 0%, #2a2d33 100%);
   border-right: 2px solid rgba(0, 255, 255, 0.45);
   box-shadow:
-    inset 0 0 12px rgba(0,255,255,0.3),
-    0 0 20px rgba(0,255,255,0.15);
+    inset 0 0 12px rgba(0, 255, 255, 0.3),
+    0 0 20px rgba(0, 255, 255, 0.15);
   position: relative;
 }
 
