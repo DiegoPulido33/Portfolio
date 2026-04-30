@@ -10,6 +10,10 @@ let mainStars: THREE.Points;
 let brightStars: THREE.Points;
 let sharedStarTexture: THREE.CanvasTexture | null = null;
 
+type GalaxyTheme = "dark" | "light";
+let currentTheme: GalaxyTheme = "dark";
+let handleThemeToggleRef: ((event: Event) => void) | null = null;
+
 // === STREAKS ===
 type StreakItem = {
   mesh: THREE.Mesh;
@@ -39,20 +43,15 @@ let currentCameraY = 0;
 
 const mouse = new THREE.Vector2();
 
-// Crucero espacial
 const CRUISE_X = -0.8;
 const CRUISE_Z = 0.8;
 
-// === CONFIG ===
 const MAX_PIXEL_RATIO = 1.25;
-
-// Delta / simulation
 const MAX_DELTA_SECONDS = 1 / 30;
 const HIDDEN_SIMULATION_SCALE = 0.05;
 const CAMERA_LERP_VISIBLE = 0.05;
 const CAMERA_LERP_HIDDEN = 0.02;
 
-// Streaks
 const STREAK_POOL_SIZE = 6;
 const MAX_ACTIVE_STREAKS = 4;
 const MAX_OFFLINE_STREAK_CREDIT = 1.25;
@@ -60,18 +59,15 @@ const STREAK_SPAWN_INTERVAL = 0.95;
 const MAX_SPAWNS_PER_TICK = 1;
 const RETURN_VISIBILITY_COOLDOWN_SECONDS = 0.35;
 
-// Starfield ranges
 const STARFIELD_X_RANGE = 600;
 const STARFIELD_Y_RANGE = 300;
 const STARFIELD_Z_RANGE = 600;
 const STARFIELD_RECYCLE_Z_BASE = -200;
 const STARFIELD_RECYCLE_Z_EXTRA = 300;
 
-// Resize cache
 let viewportWidth = window.innerWidth;
 let viewportHeight = window.innerHeight;
 
-// Listeners refs
 let handleResizeRef: (() => void) | null = null;
 let handleMouseMoveRef: ((e: MouseEvent) => void) | null = null;
 let handleVisibilityChangeRef: (() => void) | null = null;
@@ -83,6 +79,7 @@ export function initGalaxyScene() {
   const canvas = document.getElementById(
     "galaxy-canvas",
   ) as HTMLCanvasElement | null;
+
   if (!canvas) {
     console.warn("MainGalaxyScene: no se encontró #galaxy-canvas");
     return;
@@ -119,6 +116,7 @@ export function initGalaxyScene() {
     alpha: false,
     powerPreference: "high-performance",
   });
+
   renderer.setSize(viewportWidth, viewportHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, MAX_PIXEL_RATIO));
 
@@ -152,14 +150,11 @@ export function initGalaxyScene() {
   handleVisibilityChangeRef = () => {
     const nowVisible = document.visibilityState !== "hidden";
     isPageVisible = nowVisible;
-
-    // Evita delta gigante al volver
     lastFrameTime = performance.now();
 
     if (nowVisible) {
       returnVisibilityCooldown = RETURN_VISIBILITY_COOLDOWN_SECONDS;
     } else {
-      // Pequeña memoria visual, nunca avalancha real
       offlineStreakCredit = Math.min(
         offlineStreakCredit + 0.75,
         MAX_OFFLINE_STREAK_CREDIT,
@@ -178,8 +173,19 @@ export function initGalaxyScene() {
       pauseGalaxyScene();
     }
   };
-
   window.addEventListener("portfolio:motion-toggle", handleMotionToggleRef);
+
+  handleThemeToggleRef = (event: Event) => {
+    const customEvent = event as CustomEvent<{ theme?: GalaxyTheme }>;
+    const theme = customEvent.detail?.theme === "light" ? "light" : "dark";
+    applyGalaxyTheme(theme);
+  };
+  window.addEventListener("portfolio:theme-toggle", handleThemeToggleRef);
+
+  const initialTheme =
+    document.documentElement.dataset.theme === "light" ? "light" : "dark";
+
+  applyGalaxyTheme(initialTheme);
 
   startRenderLoop();
 }
@@ -219,6 +225,19 @@ export function destroyGalaxyScene() {
     handleVisibilityChangeRef = null;
   }
 
+  if (handleMotionToggleRef) {
+    window.removeEventListener(
+      "portfolio:motion-toggle",
+      handleMotionToggleRef,
+    );
+    handleMotionToggleRef = null;
+  }
+
+  if (handleThemeToggleRef) {
+    window.removeEventListener("portfolio:theme-toggle", handleThemeToggleRef);
+    handleThemeToggleRef = null;
+  }
+
   disposePoints(deepStars);
   disposePoints(mainStars);
   disposePoints(brightStars);
@@ -234,6 +253,7 @@ export function destroyGalaxyScene() {
       material.dispose();
     }
   }
+
   streakPool = [];
 
   if (sharedStarTexture) {
@@ -241,23 +261,61 @@ export function destroyGalaxyScene() {
     sharedStarTexture = null;
   }
 
-  if (handleMotionToggleRef) {
-    window.removeEventListener(
-      "portfolio:motion-toggle",
-      handleMotionToggleRef,
-    );
-    handleMotionToggleRef = null;
-  }
-  
   renderer.dispose();
 
-  // Limpieza defensiva
   // @ts-expect-error reset intencional de referencias
   scene = undefined;
   // @ts-expect-error reset intencional de referencias
   camera = undefined;
   // @ts-expect-error reset intencional de referencias
   renderer = undefined;
+}
+
+function applyGalaxyTheme(theme: GalaxyTheme) {
+  currentTheme = theme;
+
+  if (!scene || !renderer || !deepStars || !mainStars || !brightStars) return;
+
+  if (theme === "light") {
+    scene.background = new THREE.Color(0x0f2233);
+    renderer.setClearColor(0x0f2233, 1);
+
+    updatePointsMaterial(deepStars, 0x8fbad1, 0.5);
+    updatePointsMaterial(mainStars, 0xaedaff, 0.65);
+    updatePointsMaterial(brightStars, 0xffffff, 0.9);
+
+    for (const streak of streakPool) {
+      const material = streak.mesh.material as THREE.MeshBasicMaterial;
+      material.color.set(0xffffff);
+      material.opacity = 0.36;
+      material.needsUpdate = true;
+    }
+  } else {
+    scene.background = new THREE.Color(0x000000);
+    renderer.setClearColor(0x000000, 1);
+
+    updatePointsMaterial(deepStars, 0xffffff, 0.9);
+    updatePointsMaterial(mainStars, 0xdcecff, 0.9);
+    updatePointsMaterial(brightStars, 0xbfdcff, 0.9);
+
+    for (const streak of streakPool) {
+      const material = streak.mesh.material as THREE.MeshBasicMaterial;
+      material.color.set(0xdcecff);
+      material.opacity = 0.85;
+      material.needsUpdate = true;
+    }
+  }
+}
+
+function updatePointsMaterial(
+  points: THREE.Points,
+  color: number,
+  opacity: number,
+) {
+  const material = points.material as THREE.PointsMaterial;
+  material.color.set(color);
+  material.opacity = opacity;
+  material.needsUpdate = true;
 }
 
 function startRenderLoop() {
@@ -292,9 +350,16 @@ function updateScene(deltaSeconds: number) {
 }
 
 function updateStarfields(deltaSeconds: number) {
-  moveStarLayer(deepStars, 0.025, 0.06, deltaSeconds);
-  moveStarLayer(mainStars, 0.055, 0.12, deltaSeconds);
-  moveStarLayer(brightStars, 0.085, 0.18, deltaSeconds);
+  const lightBoost = currentTheme === "light" ? 0.45 : 1;
+
+  moveStarLayer(deepStars, 0.025 * lightBoost, 0.06 * lightBoost, deltaSeconds);
+  moveStarLayer(mainStars, 0.055 * lightBoost, 0.12 * lightBoost, deltaSeconds);
+  moveStarLayer(
+    brightStars,
+    0.085 * lightBoost,
+    0.18 * lightBoost,
+    deltaSeconds,
+  );
 }
 
 function updateStreakSystem(deltaSeconds: number) {
@@ -377,6 +442,7 @@ function createStarTexture() {
   canvas.height = size;
 
   const ctx = canvas.getContext("2d");
+
   if (!ctx) {
     throw new Error(
       "MainGalaxyScene: no se pudo crear contexto 2D para textura de estrella",
@@ -391,6 +457,7 @@ function createStarTexture() {
 
   const texture = new THREE.CanvasTexture(canvas);
   texture.needsUpdate = true;
+
   return texture;
 }
 
@@ -477,9 +544,11 @@ function deactivateStreak(streak: StreakItem) {
 
 function getActiveStreakCount() {
   let count = 0;
+
   for (const streak of streakPool) {
     if (streak.active) count++;
   }
+
   return count;
 }
 
@@ -550,6 +619,7 @@ function disposePoints(points: THREE.Points) {
   points.geometry.dispose();
 
   const material = points.material;
+
   if (Array.isArray(material)) {
     material.forEach((m) => m.dispose());
   } else {

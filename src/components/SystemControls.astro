@@ -35,31 +35,86 @@ import "../styles/SystemControls.css";
     </span>
   </button>
 </div>
+<label class="bb8-toggle" title="claro / oscuro">
+  <input
+    id="system-theme-toggle"
+    class="bb8-toggle__checkbox"
+    type="checkbox"
+  />
+  <div class="bb8-toggle__container">
+    <div class="bb8-toggle__scenery">
+      <div class="bb8-toggle__star"></div>
+      <div class="bb8-toggle__star"></div>
+      <div class="bb8-toggle__star"></div>
+      <div class="bb8-toggle__star"></div>
+      <div class="bb8-toggle__star"></div>
+      <div class="bb8-toggle__star"></div>
+      <div class="bb8-toggle__star"></div>
+      <div class="tatto-1"></div>
+      <div class="tatto-2"></div>
+      <div class="gomrassen"></div>
+      <div class="hermes"></div>
+      <div class="chenini"></div>
+      <div class="bb8-toggle__cloud"></div>
+      <div class="bb8-toggle__cloud"></div>
+      <div class="bb8-toggle__cloud"></div>
+    </div>
+
+    <div class="bb8">
+      <div class="bb8__head-container">
+        <div class="bb8__antenna"></div>
+        <div class="bb8__antenna"></div>
+        <div class="bb8__head"></div>
+      </div>
+      <div class="bb8__body"></div>
+    </div>
+
+    <div class="artificial__hidden">
+      <div class="bb8__shadow"></div>
+    </div>
+  </div>
+</label>
 
 <script is:inline>
   (() => {
     const root = document.getElementById("system-controls");
     const audioToggle = document.getElementById("system-audio-toggle");
     const motionToggle = document.getElementById("system-motion-toggle");
+    const themeToggle = document.getElementById("system-theme-toggle");
 
-    if (!root || !audioToggle || !motionToggle) return;
+    if (!root || !audioToggle || !motionToggle || !themeToggle) return;
 
     let audioEnabled = true;
     let motionEnabled = true;
+    let currentTheme = localStorage.getItem("portfolioTheme") || "dark";
+
+    function applyTheme(theme) {
+      currentTheme = theme;
+      document.documentElement.dataset.theme = theme;
+      themeToggle.checked = theme === "light";
+      localStorage.setItem("portfolioTheme", theme);
+
+      window.dispatchEvent(
+        new CustomEvent("portfolio:theme-toggle", {
+          detail: { theme },
+        }),
+      );
+    }
 
     function syncUI() {
       audioToggle.setAttribute("data-state", audioEnabled ? "on" : "off");
       motionToggle.setAttribute(
         "data-state",
-        motionEnabled ? "running" : "paused"
+        motionEnabled ? "running" : "paused",
       );
+      themeToggle.checked = currentTheme === "light";
     }
 
     function emitAudioChange() {
       window.dispatchEvent(
         new CustomEvent("portfolio:audio-toggle", {
           detail: { enabled: audioEnabled },
-        })
+        }),
       );
     }
 
@@ -67,27 +122,30 @@ import "../styles/SystemControls.css";
       window.dispatchEvent(
         new CustomEvent("portfolio:motion-toggle", {
           detail: { enabled: motionEnabled },
-        })
+        }),
       );
     }
 
-    function handleAudioToggle(event) {
+    audioToggle.addEventListener("click", (event) => {
       event.stopPropagation();
       audioEnabled = !audioEnabled;
       syncUI();
       emitAudioChange();
-    }
+    });
 
-    function handleMotionToggle(event) {
+    motionToggle.addEventListener("click", (event) => {
       event.stopPropagation();
       motionEnabled = !motionEnabled;
       syncUI();
       emitMotionChange();
-    }
+    });
 
-    audioToggle.addEventListener("click", handleAudioToggle);
-    motionToggle.addEventListener("click", handleMotionToggle);
+    themeToggle.addEventListener("click", (event) => {
+      event.stopPropagation();
+      applyTheme(currentTheme === "dark" ? "light" : "dark");
+    });
 
+    applyTheme(currentTheme);
     syncUI();
     emitAudioChange();
     emitMotionChange();

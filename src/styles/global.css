@@ -205,3 +205,35 @@ body {
     @apply font-sans;
   }
 }
+
+html[data-theme="light"] body {
+  background: #dff6ff;
+}
+
+html[data-theme="light"] #lightsaber-cursor {
+  filter:
+    drop-shadow(0 0 6px rgba(var(--kyber-rgb), 0.75))
+    drop-shadow(0 0 14px rgba(var(--kyber-rgb), 0.45));
+}
+
+html[data-theme="light"] .holo-frame__glass {
+  background:
+    radial-gradient(
+      ellipse 900px 420px at 50% 34%,
+      rgba(var(--kyber-rgb), 0.13),
+      transparent 68%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(210, 245, 255, 0.22),
+      rgba(140, 205, 235, 0.18)
+    );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 0 80px rgba(var(--kyber-rgb), 0.08),
+    0 0 52px rgba(var(--kyber-rgb), 0.18);
+}
+
+html[data-theme="light"] .hub-scene {
+  filter: brightness(1.12) saturate(0.92);
+}
