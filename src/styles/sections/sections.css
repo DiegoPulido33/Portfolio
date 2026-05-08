@@ -1,0 +1,188 @@
+/* =========================================
+   SECTIONS — SHARED IMMERSIVE SYSTEM
+========================================= */
+
+.section-zone {
+  position: relative;
+  width: 100%;
+  min-height: 100%;
+  color: #f5ffff;
+}
+
+.section-zone__shell {
+  position: relative;
+  width: 100%;
+  min-height: 100%;
+  padding: clamp(18px, 2.4vw, 34px);
+  border: 1px solid rgba(var(--kyber-rgb), 0.18);
+  background:
+    radial-gradient(
+      ellipse at 50% 0%,
+      rgba(var(--kyber-rgb), 0.12),
+      transparent 46%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(2, 12, 24, 0.52),
+      rgba(1, 5, 14, 0.72)
+    );
+  backdrop-filter: blur(14px) saturate(1.35);
+  box-shadow:
+    inset 0 0 44px rgba(var(--kyber-rgb), 0.07),
+    0 0 48px rgba(var(--kyber-rgb), 0.08);
+  clip-path: polygon(
+    18px 0,
+    calc(100% - 18px) 0,
+    100% 18px,
+    100% calc(100% - 18px),
+    calc(100% - 18px) 100%,
+    18px 100%,
+    0 calc(100% - 18px),
+    0 18px
+  );
+}
+
+.section-zone__shell::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  pointer-events: none;
+  border: 1px solid rgba(var(--kyber-rgb), 0.1);
+  clip-path: inherit;
+}
+
+.section-zone__shell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.16;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.08) 0,
+    rgba(255, 255, 255, 0.08) 1px,
+    transparent 1px,
+    transparent 9px
+  );
+  mix-blend-mode: screen;
+}
+
+.section-zone__header {
+  position: relative;
+  z-index: 2;
+  max-width: 820px;
+  margin-bottom: clamp(22px, 3vw, 38px);
+}
+
+.section-zone__eyebrow {
+  margin: 0 0 10px;
+  color: rgba(var(--kyber-rgb), 0.9);
+  font-size: clamp(0.68rem, 0.8vw, 0.82rem);
+  font-weight: 900;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.section-zone__title {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(2rem, 4vw, 4.4rem);
+  font-weight: 950;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+  text-shadow:
+    0 0 22px rgba(var(--kyber-rgb), 0.55),
+    0 0 58px rgba(var(--kyber-rgb), 0.22);
+}
+
+.section-zone__intro {
+  margin: 18px 0 0;
+  max-width: 760px;
+  color: rgba(210, 245, 255, 0.82);
+  font-size: clamp(0.88rem, 1vw, 1.02rem);
+  line-height: 1.75;
+  font-weight: 500;
+}
+
+.section-zone__content {
+  position: relative;
+  z-index: 2;
+}
+
+.section-zone__footer {
+  position: relative;
+  z-index: 2;
+  margin-top: clamp(24px, 3vw, 42px);
+  padding-top: 18px;
+  border-top: 1px solid rgba(var(--kyber-rgb), 0.14);
+  color: rgba(210, 245, 255, 0.78);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+/* Section panel inside PortfolioShell */
+
+.section-panel {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  width: min(1040px, 84%);
+  max-height: 66%;
+  transform: translate(-50%, -50%);
+  z-index: 55;
+  pointer-events: auto;
+  overflow: auto;
+  padding: 18px;
+  color: #f5ffff;
+}
+
+.section-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.section-panel::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.section-panel::-webkit-scrollbar-thumb {
+  background: rgba(var(--kyber-rgb), 0.48);
+  border-radius: 999px;
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+  .section-panel {
+    top: 50%;
+    width: min(92vw, 760px);
+    max-height: 72%;
+    padding: 12px;
+  }
+
+  .section-zone__shell {
+    padding: 22px;
+  }
+}
+
+@media (max-width: 600px) {
+  .section-panel {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 100%;
+    max-height: none;
+    transform: none;
+    padding: 90px 14px 260px;
+    overflow: visible;
+  }
+
+  .section-zone__shell {
+    padding: 20px 16px;
+  }
+
+  .section-zone__intro {
+    font-size: 0.84rem;
+    line-height: 1.65;
+  }
+}

@@ -1,17 +1,29 @@
 ---
+import { projectsContent } from "../../data/projectsContent";
+import ProjectDeck from "./projectDeck";
+
+const { eyebrow, title, intro, featuredProjects, sectionNote } =
+  projectsContent;
 ---
 
-<section id="projects" class="section-projects">
-  <div class="section-container">
-    <div class="section-window">
-      <div class="section-header">
-        <h1 class="section-title">Proyectos</h1>
-        <p class="section-subtitle">Explora mis trabajos destacados</p>
-      </div>
-      <div class="section-content">
-        <!-- El contenido se agregará aquí -->
-        <p>Contenido de proyectos aquí</p>
-      </div>
+<section
+  class="section-zone section-zone--projects"
+  id="projects"
+  data-zone="orbital-hangar"
+>
+  <div class="section-zone__shell">
+    <header class="section-zone__header projects-header">
+      <p class="section-zone__eyebrow">{eyebrow}</p>
+      <h1 class="section-zone__title">{title}</h1>
+      <p class="section-zone__intro">{intro}</p>
+    </header>
+
+    <div class="section-zone__content projects-zone__content">
+      <ProjectDeck client:load projects={featuredProjects} />
     </div>
+
+    <footer class="section-zone__footer projects-footer">
+      <p>{sectionNote}</p>
+    </footer>
   </div>
 </section>
