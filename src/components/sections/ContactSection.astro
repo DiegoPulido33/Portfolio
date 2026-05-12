@@ -1,17 +1,72 @@
 ---
+import { contactContent } from "../../data/contactContent";
+import SectionNavigator from "../sectionNavigator.astro";
+const {
+  eyebrow,
+  title,
+  intro,
+  availability,
+  statement,
+  channels,
+  closingNote,
+} = contactContent;
 ---
 
-<section id="contact" class="section-contact">
-  <div class="section-container">
-    <div class="section-window">
-      <header class="section-header">
-        <h1 class="section-title">Contacto</h1>
-        <p class="section-subtitle">Hablemos de nuevos retos y oportunidades</p>
-      </header>
+<section id="contact" class="section-contact" data-zone="contact-channel">
+  <div class="contact-bg-grid"></div>
 
-      <div class="section-content">
-        <p>Información de contacto aquí</p>
+  <div class="contact-shell">
+    <header class="contact-header">
+      <p class="contact-header__eyebrow">{eyebrow}</p>
+      <h1 class="contact-header__title">{title}</h1>
+      <p class="contact-header__intro">{intro}</p>
+    </header>
+
+    <div class="contact-layout">
+      <aside class="contact-panel">
+        <span class="contact-panel__label">{availability.label}</span>
+        <strong class="contact-panel__status">{availability.value}</strong>
+        <p>{statement}</p>
+      </aside>
+
+      <div class="contact-cards">
+        {
+          channels.map((channel) => (
+            <article class="contact-card">
+              <div>
+                <span class="contact-card__label">{channel.label}</span>
+                <p class="contact-card__value">{channel.value}</p>
+              </div>
+
+              {channel.href ? (
+                <a
+                  class="contact-card__action"
+                  href={channel.href}
+                  target={
+                    channel.href.startsWith("http") ? "_blank" : undefined
+                  }
+                  rel={
+                    channel.href.startsWith("http")
+                      ? "noopener noreferrer"
+                      : undefined
+                  }
+                >
+                  {channel.action}
+                </a>
+              ) : (
+                <span class="contact-card__action contact-card__action--static">
+                  {channel.action}
+                </span>
+              )}
+            </article>
+          ))
+        }
       </div>
     </div>
+
+    <footer class="contact-footer">
+      <p>{closingNote}</p>
+    </footer>
   </div>
+  <SectionNavigator current="contact" />
 </section>

@@ -1,0 +1,57 @@
+---
+import "../styles/hubReturnButton.css";
+
+interface Props {
+  href?: string;
+  label?: string;
+}
+
+const { href = "/hub", label = "RETURN TO HUB" } = Astro.props;
+---
+
+<a
+  href={href}
+  class="hub-return-control"
+  aria-label="Return to main hub"
+  data-hub-return
+>
+  <span class="hub-return-control__aura" aria-hidden="true"></span>
+
+  <span class="hub-return-control__icon" aria-hidden="true">
+    <span></span>
+    <span></span>
+    <span></span>
+  </span>
+
+  <span class="hub-return-control__text">{label}</span>
+</a>
+
+<script>
+  const button = document.querySelector("[data-hub-return]");
+
+  if (button instanceof HTMLAnchorElement) {
+    button.addEventListener("click", (event) => {
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+      if (
+        prefersReducedMotion ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey
+      ) {
+        return;
+      }
+
+      event.preventDefault();
+
+      document.body.classList.add("section-warp-out");
+
+      window.setTimeout(() => {
+        window.location.href = button.href;
+      }, 620);
+    });
+  }
+</script>

@@ -1,20 +1,57 @@
 ---
+import { technologiesContent } from "../../data/tecnhologiesContent";
+import SectionNavigator from "../sectionNavigator.astro";
 
+const { eyebrow, title, intro, groups, closingNote } = technologiesContent;
 ---
 
-<section id="technologies" class="section-technologies">
-  <div class="section-container">
-    <div class="section-window">
-      <header class="section-header">
-        <h1 class="section-title">Tecnologías</h1>
-        <p class="section-subtitle">
-          Las herramientas y tecnologías que utilizo
-        </p>
-      </header>
+<section
+  id="technologies"
+  class="section-technologies"
+  data-zone="systems-core"
+>
+  <div class="technologies-bg-grid"></div>
 
-      <div class="section-content">
-        <p>Contenido de tecnologías aquí</p>
-      </div>
+  <div class="technologies-shell">
+    <header class="technologies-header">
+      <p class="technologies-header__eyebrow">{eyebrow}</p>
+
+      <h1 class="technologies-header__title">
+        {title}
+      </h1>
+
+      <p class="technologies-header__intro">
+        {intro}
+      </p>
+    </header>
+
+    <div class="technologies-grid">
+      {
+        groups.map((group, index) => (
+          <article class={`tech-card tech-card--${index + 1}`}>
+            <div class="tech-card__top">
+              <span class="tech-card__index">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+
+              <h2>{group.title}</h2>
+            </div>
+
+            <p class="tech-card__description">{group.description}</p>
+
+            <div class="tech-card__stack">
+              {group.items.map((item) => (
+                <span>{item}</span>
+              ))}
+            </div>
+          </article>
+        ))
+      }
     </div>
+
+    <footer class="technologies-footer">
+      <p>{closingNote}</p>
+    </footer>
   </div>
+  <SectionNavigator current="technologies" />
 </section>

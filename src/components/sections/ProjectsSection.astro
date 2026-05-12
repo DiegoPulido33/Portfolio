@@ -1,5 +1,6 @@
 ---
 import { projectsContent } from "../../data/projectsContent";
+import SectionNavigator from "../sectionNavigator.astro";
 import ProjectDeck from "./projectDeck";
 
 const { eyebrow, title, intro, featuredProjects, sectionNote } =
@@ -26,4 +27,5 @@ const { eyebrow, title, intro, featuredProjects, sectionNote } =
       <p>{sectionNote}</p>
     </footer>
   </div>
+  <SectionNavigator current="projects" />
 </section>

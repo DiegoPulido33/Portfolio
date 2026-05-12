@@ -3,11 +3,11 @@ import "../styles/global.css";
 import "../styles/hub.css";
 import "../styles/sections/sections.css";
 import "../styles/sections/projects.css";
-// import "../styles/sections/experience.css";
 
 import GalaxyCanvas from "../components/GalaxyCanvas.astro";
 import KyberMenu from "../components/KyberMenu.astro";
 import SystemControls from "../components/SystemControls.astro";
+import HubReturnButton from "../components/hubReturnButton.astro";
 
 const { title = "Portfolio Diego Pulido Rivero" } = Astro.props;
 ---
@@ -32,8 +32,7 @@ const { title = "Portfolio Diego Pulido Rivero" } = Astro.props;
     <div id="main-ui" class="main-ui-visible">
       <KyberMenu />
       <SystemControls />
-      <a class="hub-return" href="/hub" aria-label="Volver al hub"> HUB </a>
-
+      <HubReturnButton href="/hub" />
       <div id="portal-container" class="bridge-hub">
         <div class="hub-scene">
           <div class="holo-frame" aria-hidden="true">
@@ -42,7 +41,7 @@ const { title = "Portfolio Diego Pulido Rivero" } = Astro.props;
             <div class="holo-frame__inner-glow"></div>
             <div class="holo-frame__scanlines"></div>
             <div class="holo-frame__energy-sweep"></div>
-            
+
             <div class="holo-frame__top-bar"></div>
             <div class="holo-frame__top-bar-light"></div>
 

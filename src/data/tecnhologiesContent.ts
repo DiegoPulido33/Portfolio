@@ -17,13 +17,14 @@ export const technologiesContent = {
                 "CSS",
                 "JavaScript",
                 "TypeScript",
-                "Angular",
                 "React",
                 "Next.js",
+                "Angular",
                 "Astro",
                 "Tailwind CSS",
             ],
         },
+
         {
             title: "Backend & APIs",
             description:
@@ -36,8 +37,39 @@ export const technologiesContent = {
                 "PHP",
                 "REST APIs",
                 "Authentication",
+                "MongoDB",
             ],
         },
+
+        {
+            title: "IA Aplicada",
+            description:
+                "Uso de IA como parte activa del workflow de desarrollo, prototipado, debugging, documentación, diseño de sistemas y aceleración de procesos técnicos.",
+            items: [
+                "ChatGPT",
+                "LLM workflows",
+                "AI-assisted development",
+                "Prompt Engineering",
+                "AI Debugging",
+                "AI Prototyping",
+                "Documentation Assistance",
+            ],
+        },
+
+        {
+            title: "Automatización & Workflows",
+            description:
+                "Automatización de tareas, integración entre servicios y creación de flujos orientados a productividad y operación técnica.",
+            items: [
+                "n8n",
+                "Automation Pipelines",
+                "Webhook Integrations",
+                "API Workflows",
+                "Process Automation",
+                "CLI Tooling",
+            ],
+        },
+
         {
             title: "Infrastructure & Deployment",
             description:
@@ -48,19 +80,22 @@ export const technologiesContent = {
                 "Linux",
                 "VPS",
                 "Cloud Environments",
+                "Cloudflare",
+                "DNS & SSL",
                 "Reverse Proxy",
                 "Production Operations",
+                "Production Debugging",
             ],
         },
+
         {
             title: "Workflow & Engineering",
             description:
-                "Herramientas y prácticas que forman parte del trabajo diario de desarrollo, versionado y mejora continua.",
+                "Herramientas y prácticas que forman parte del trabajo diario de desarrollo, resolución de problemas, versionado y mejora continua.",
             items: [
                 "Git",
                 "GitHub",
                 "Debugging",
-                "Automation",
                 "CLI",
                 "Problem Solving",
                 "Technical Documentation",
@@ -69,5 +104,5 @@ export const technologiesContent = {
     ],
 
     closingNote:
-        "Mi valor no está solo en conocer herramientas, sino en saber conectarlas para construir soluciones completas y mantenibles.",
+        "Mi valor no está solo en conocer herramientas, sino en saber conectarlas para construir soluciones completas, mantenibles y orientadas a entornos reales.",
 };

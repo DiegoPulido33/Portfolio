@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
+@import "./section-navigator.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -84,7 +85,7 @@ body {
 
 @theme inline {
   --font-heading: var(--font-sans);
-  --font-sans: 'Geist Variable', sans-serif;
+  --font-sans: "Geist Variable", sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -211,8 +212,7 @@ html[data-theme="light"] body {
 }
 
 html[data-theme="light"] #lightsaber-cursor {
-  filter:
-    drop-shadow(0 0 6px rgba(var(--kyber-rgb), 0.75))
+  filter: drop-shadow(0 0 6px rgba(var(--kyber-rgb), 0.75))
     drop-shadow(0 0 14px rgba(var(--kyber-rgb), 0.45));
 }
 
@@ -236,4 +236,125 @@ html[data-theme="light"] .holo-frame__glass {
 
 html[data-theme="light"] .hub-scene {
   filter: brightness(1.12) saturate(0.92);
+}
+
+/* =========================================
+   SECTION WARP OUT
+========================================= */
+
+body.section-warp-out {
+  overflow: hidden;
+}
+
+body.section-warp-out .section-panel {
+  animation: sectionWarpOut 620ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+body.section-warp-out .hub-return-control {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+body.section-warp-out::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle at 12% 6%,
+      rgba(var(--kyber-rgb), 0.22),
+      transparent 18%
+    ),
+    linear-gradient(
+      115deg,
+      transparent 0%,
+      transparent 42%,
+      rgba(var(--kyber-rgb), 0.08) 48%,
+      rgba(255, 255, 255, 0.08) 50%,
+      rgba(var(--kyber-rgb), 0.08) 52%,
+      transparent 58%,
+      transparent 100%
+    ),
+    rgba(1, 8, 18, 0.18);
+
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+
+  animation: sectionWarpOverlay 620ms ease forwards;
+}
+
+body.section-warp-out::after {
+  content: "";
+  position: fixed;
+  inset: -40%;
+  z-index: 9991;
+  pointer-events: none;
+
+  background: repeating-linear-gradient(
+    115deg,
+    transparent 0px,
+    transparent 24px,
+    rgba(var(--kyber-rgb), 0.16) 26px,
+    transparent 30px
+  );
+
+  opacity: 0;
+  filter: blur(0.5px);
+
+  animation: sectionWarpLines 620ms ease forwards;
+}
+
+@keyframes sectionWarpOut {
+  0% {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    filter: blur(12px);
+    transform: translate(-50%, -50%) scale(0.985);
+  }
+}
+
+@keyframes sectionWarpOverlay {
+  0% {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+
+  100% {
+    opacity: 1;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+}
+
+@keyframes sectionWarpLines {
+  0% {
+    opacity: 0;
+    transform: translateX(-10%) scale(1);
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(12%) scale(1.28);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.section-warp-out .section-panel,
+  body.section-warp-out::before,
+  body.section-warp-out::after {
+    animation: none !important;
+  }
 }

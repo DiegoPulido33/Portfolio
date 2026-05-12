@@ -70,7 +70,7 @@ export async function ensureAudioReady() {
 
   const humSource = ctx.createMediaElementSource(humAudio);
   humGain = ctx.createGain();
-  humGain.gain.value = 0.22;
+  humGain.gain.value = 0.08;
 
   humSource.connect(humGain).connect(masterGain);
   await humAudio.play();
@@ -102,7 +102,7 @@ function handleMouseMove(e: MouseEvent) {
   const intensity = Math.min(speed * 1.3, 1);
 
   humGain.gain.setTargetAtTime(
-    0.22 + intensity * 0.25,
+    0.08 + intensity * 0.1,
     ctx.currentTime,
     0.12
   );
@@ -112,7 +112,7 @@ function handleMouseMove(e: MouseEvent) {
     now - lastSwingTime > SWING_COOLDOWN
   ) {
     lastSwingTime = now;
-    const swingVolume = Math.min(intensity * 0.35, 0.35);
+    const swingVolume = Math.min(intensity * 0.2, 0.1);
     playOneShot("/audio/lightsaber/lightsaber-swing.mp3", swingVolume);
   }
 }

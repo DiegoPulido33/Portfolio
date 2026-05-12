@@ -1,0 +1,51 @@
+---
+const { current } = Astro.props;
+
+const sections = [
+  {
+    id: "projects",
+    label: "Proyectos",
+    href: "/projects",
+  },
+  {
+    id: "experience",
+    label: "Experiencia",
+    href: "/experience",
+  },
+  {
+    id: "technologies",
+    label: "Tecnologías",
+    href: "/technologies",
+  },
+  {
+    id: "contact",
+    label: "Contacto",
+    href: "/contact",
+  },
+];
+
+const filteredSections = sections.filter(
+  (section) => section.id !== current
+);
+---
+
+<nav class="section-navigator">
+  <div class="section-navigator__inner">
+    <span class="section-navigator__label">
+      Explorar secciones
+    </span>
+
+    <div class="section-navigator__links">
+      {
+        filteredSections.map((section) => (
+          <a
+            href={section.href}
+            class="section-navigator__link"
+          >
+            {section.label}
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</nav>
