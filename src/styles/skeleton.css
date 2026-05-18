@@ -1,0 +1,180 @@
+.skeleton {
+  position: fixed;
+  inset: 0;
+  z-index: 40000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    radial-gradient(circle at center, rgba(18, 36, 56, 0.18), transparent 55%),
+    rgba(2, 6, 12, 0.82);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  opacity: 1;
+  visibility: visible;
+
+  transition:
+    opacity 0.45s ease,
+    visibility 0.45s ease;
+}
+
+.skeleton--hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.skeleton__window {
+  position: relative;
+
+  width: min(760px, 82vw);
+  height: min(420px, 54vw);
+
+  border-radius: 34px;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(8, 16, 28, 0.92),
+      rgba(3, 8, 16, 0.96)
+    );
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.05),
+    inset 0 0 80px rgba(126, 208, 255, 0.04),
+    0 0 80px rgba(126, 208, 255, 0.08),
+    0 40px 120px rgba(0,0,0,0.42);
+}
+
+.skeleton__glass {
+  position: absolute;
+  inset: 0;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(126, 208, 255, 0.08),
+      transparent 70%
+    );
+
+  animation: skeletonGlassPulse 2.6s ease-in-out infinite;
+}
+
+.skeleton__scan {
+  position: absolute;
+  inset: 0;
+
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(255,255,255,0.025) 0px,
+      rgba(255,255,255,0.025) 1px,
+      transparent 1px,
+      transparent 7px
+    );
+
+  opacity: 0.18;
+}
+
+.skeleton__edge {
+  position: absolute;
+  background: rgba(126, 208, 255, 0.42);
+
+  box-shadow:
+    0 0 12px rgba(126, 208, 255, 0.42),
+    0 0 28px rgba(126, 208, 255, 0.12);
+}
+
+.skeleton__edge--top,
+.skeleton__edge--bottom {
+  left: 54px;
+  right: 54px;
+  height: 1px;
+}
+
+.skeleton__edge--top {
+  top: 22px;
+}
+
+.skeleton__edge--bottom {
+  bottom: 22px;
+}
+
+.skeleton__edge--left,
+.skeleton__edge--right {
+  top: 54px;
+  bottom: 54px;
+  width: 1px;
+}
+
+.skeleton__edge--left {
+  left: 22px;
+}
+
+.skeleton__edge--right {
+  right: 22px;
+}
+
+.skeleton__corner {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+
+  border-color: rgba(126, 208, 255, 0.75);
+
+  filter: drop-shadow(0 0 10px rgba(126, 208, 255, 0.3));
+}
+
+.skeleton__corner--tl {
+  top: 18px;
+  left: 18px;
+
+  border-top: 2px solid;
+  border-left: 2px solid;
+}
+
+.skeleton__corner--tr {
+  top: 18px;
+  right: 18px;
+
+  border-top: 2px solid;
+  border-right: 2px solid;
+}
+
+.skeleton__corner--bl {
+  bottom: 18px;
+  left: 18px;
+
+  border-bottom: 2px solid;
+  border-left: 2px solid;
+}
+
+.skeleton__corner--br {
+  bottom: 18px;
+  right: 18px;
+
+  border-bottom: 2px solid;
+  border-right: 2px solid;
+}
+
+@keyframes skeletonGlassPulse {
+  0% {
+    opacity: 0.45;
+    transform: scale(0.985);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0.45;
+    transform: scale(0.985);
+  }
+}

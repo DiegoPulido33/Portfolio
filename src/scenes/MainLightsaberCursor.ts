@@ -1,7 +1,7 @@
 // src/scenes/MainLightsaberCursor.ts
 import { ensureAudioReady } from "./LightsaberAudio";
 
-const TRAIL_COUNT = 8;
+const TRAIL_COUNT = 4;
 const HOTSPOT_X = 14;   // distancia desde el borde izquierdo hasta la punta/focus real
 const HOTSPOT_Y = 6;   // distancia desde el borde superior hasta el punto de focus
 const SABER_ROTATION = -12;
@@ -60,7 +60,7 @@ function initLightsaberCursor() {
       trail.className = "lightsaber-trail";
       trail.setAttribute("aria-hidden", "true");
 
-      const opacity = Math.max(0.2, 0.8 - i * 0.08);
+      const opacity = Math.max(0.12, 0.52 - i * 0.08);
       const scale = 1 - i * 0.035;
       const blur = 1 + i * 0.7;
 
@@ -135,7 +135,7 @@ function initLightsaberCursor() {
       trail.style.top = `${pos.y}px`;
 
       if (!isTouchLike || isTouchActive) {
-        trail.style.opacity = `${Math.max(0.04, 0.22 - i * 0.022)}`;
+        trail.style.opacity = `${Math.max(0.025, 0.14 - i * 0.025)}`;
       } else {
         trail.style.opacity = "0";
       }

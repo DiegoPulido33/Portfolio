@@ -28,10 +28,10 @@ import "../styles/SystemControls.css";
     title="Animación"
   >
     <span class="system-controls__icon system-controls__icon--motion-on">
-      <img src="/icons/Rebel_Icon.svg" alt="Rebel Symbol" />
+      <img src="/icons/motion_off.svg" alt="Animaciones activas" />
     </span>
     <span class="system-controls__icon system-controls__icon--motion-off">
-      <img src="/icons/Empire_Icon.svg" alt="Empire Symbol" />
+      <img src="/icons/motion_on.svg" alt="Animaciones pausadas" />
     </span>
   </button>
 </div>
@@ -86,7 +86,7 @@ import "../styles/SystemControls.css";
 
     let audioEnabled = true;
     let motionEnabled = true;
-    let currentTheme = localStorage.getItem("portfolioTheme") || "dark";
+    let currentTheme = localStorage.getItem("portfolioTheme") || "light";
 
     function applyTheme(theme) {
       currentTheme = theme;

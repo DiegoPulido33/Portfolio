@@ -8,6 +8,7 @@ import GalaxyCanvas from "../components/GalaxyCanvas.astro";
 import KyberMenu from "../components/KyberMenu.astro";
 import SystemControls from "../components/SystemControls.astro";
 import HubReturnButton from "../components/hubReturnButton.astro";
+import Skeleton from "@/components/skeleton.astro";
 
 const { title = "Portfolio Diego Pulido Rivero" } = Astro.props;
 ---
@@ -21,6 +22,7 @@ const { title = "Portfolio Diego Pulido Rivero" } = Astro.props;
   </head>
 
   <body>
+    <Skeleton />
     <GalaxyCanvas />
 
     <img

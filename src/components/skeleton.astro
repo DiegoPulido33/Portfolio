@@ -1,0 +1,45 @@
+<div class="skeleton" id="skeleton" aria-hidden="true">
+  <div class="skeleton__window">
+    <div class="skeleton__glass"></div>
+    <div class="skeleton__scan"></div>
+
+    <div class="skeleton__edge skeleton__edge--top"></div>
+    <div class="skeleton__edge skeleton__edge--bottom"></div>
+    <div class="skeleton__edge skeleton__edge--left"></div>
+    <div class="skeleton__edge skeleton__edge--right"></div>
+
+    <div class="skeleton__corner skeleton__corner--tl"></div>
+    <div class="skeleton__corner skeleton__corner--tr"></div>
+    <div class="skeleton__corner skeleton__corner--bl"></div>
+    <div class="skeleton__corner skeleton__corner--br"></div>
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+    const skeleton = document.getElementById("skeleton");
+    if (!skeleton) return;
+
+    const MIN_VISIBLE_TIME = 1400;
+    const start = performance.now();
+
+    function hideSkeleton() {
+      const elapsed = performance.now() - start;
+      const delay = Math.max(0, MIN_VISIBLE_TIME - elapsed);
+
+      window.setTimeout(() => {
+        skeleton.classList.add("skeleton--hidden");
+
+        window.setTimeout(() => {
+          skeleton.remove();
+        }, 650);
+      }, delay);
+    }
+
+    if (document.readyState === "complete") {
+      hideSkeleton();
+    } else {
+      window.addEventListener("load", hideSkeleton, { once: true });
+    }
+  })();
+</script>

@@ -3,6 +3,7 @@
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
 @import "./section-navigator.css";
+@import "./skeleton.css";
 
 @custom-variant dark (&:is(.dark *));
 

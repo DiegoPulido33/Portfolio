@@ -46,7 +46,7 @@ const mouse = new THREE.Vector2();
 const CRUISE_X = -0.8;
 const CRUISE_Z = 0.8;
 
-const MAX_PIXEL_RATIO = 1.25;
+const MAX_PIXEL_RATIO = 1;
 const MAX_DELTA_SECONDS = 1 / 30;
 const HIDDEN_SIMULATION_SCALE = 0.05;
 const CAMERA_LERP_VISIBLE = 0.05;
@@ -64,6 +64,10 @@ const STARFIELD_Y_RANGE = 300;
 const STARFIELD_Z_RANGE = 600;
 const STARFIELD_RECYCLE_Z_BASE = -200;
 const STARFIELD_RECYCLE_Z_EXTRA = 300;
+
+const TARGET_FPS = 30;
+const FRAME_INTERVAL = 1000 / TARGET_FPS;
+let lastRenderTime = 0;
 
 let viewportWidth = window.innerWidth;
 let viewportHeight = window.innerHeight;
@@ -122,9 +126,9 @@ export function initGalaxyScene() {
 
   sharedStarTexture = createStarTexture();
 
-  deepStars = createStarLayer(3000, 1, 0xffffff, sharedStarTexture);
-  mainStars = createStarLayer(1500, 2, 0xdcecff, sharedStarTexture);
-  brightStars = createStarLayer(80, 4, 0xbfdcff, sharedStarTexture);
+  deepStars = createStarLayer(1400, 1, 0xffffff, sharedStarTexture);
+  mainStars = createStarLayer(700, 2, 0xdcecff, sharedStarTexture);
+  brightStars = createStarLayer(45, 4, 0xbfdcff, sharedStarTexture);
 
   scene.add(deepStars);
   scene.add(mainStars);
@@ -305,6 +309,9 @@ function applyGalaxyTheme(theme: GalaxyTheme) {
       material.needsUpdate = true;
     }
   }
+  if (isPaused) {
+    renderer.render(scene, camera);
+  }
 }
 
 function updatePointsMaterial(
@@ -323,6 +330,9 @@ function startRenderLoop() {
     animationFrameId = requestAnimationFrame(loop);
 
     if (!isInitialized || isPaused) return;
+
+    if (now - lastRenderTime < FRAME_INTERVAL) return;
+    lastRenderTime = now;
 
     let deltaSeconds = (now - lastFrameTime) / 1000;
     lastFrameTime = now;
