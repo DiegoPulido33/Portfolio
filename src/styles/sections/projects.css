@@ -7,6 +7,7 @@
 }
 
 .project-deck {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(260px, 0.85fr) minmax(360px, 1.15fr);
   gap: clamp(28px, 5vw, 70px);
@@ -84,6 +85,7 @@
 
 .project-deck__stage {
   position: relative;
+  overflow: visible;
   min-height: 460px;
   display: grid;
   place-items: center;
@@ -408,7 +410,6 @@
   margin: -6px;
 }
 
-
 .project-card__image {
   position: absolute;
   inset: 0;
@@ -428,11 +429,7 @@
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(
-      180deg,
-      rgba(1, 6, 14, 0.04),
-      rgba(1, 6, 14, 0.72)
-    ),
+    linear-gradient(180deg, rgba(1, 6, 14, 0.04), rgba(1, 6, 14, 0.72)),
     radial-gradient(
       ellipse at 50% 20%,
       rgba(var(--kyber-rgb), 0.16),
@@ -462,4 +459,202 @@
 
 .project-card__grid {
   z-index: 4;
+}
+
+/* =========================================
+   PROJECT IMAGE LINK + HOVER
+========================================= */
+
+.project-card__preview {
+  position: relative;
+  overflow: hidden;
+}
+
+.project-card__preview-link {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+
+  display: block;
+
+  cursor: none;
+}
+
+.project-card__preview-link .project-card__image {
+  pointer-events: none;
+}
+
+.project-card__hover-open {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+
+  background: radial-gradient(
+    circle at center,
+    rgba(var(--kyber-rgb), 0.08),
+    rgba(0, 0, 0, 0.62)
+  );
+
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.project-card__hover-open span {
+  color: rgba(var(--kyber-rgb), 0.96);
+
+  font-size: 2.4rem;
+  font-weight: 300;
+  line-height: 1;
+
+  transform: translateX(8px) scale(0.72);
+
+  text-shadow:
+    0 0 12px rgba(var(--kyber-rgb), 0.82),
+    0 0 28px rgba(var(--kyber-rgb), 0.42);
+
+  filter: drop-shadow(0 0 14px rgba(var(--kyber-rgb), 0.28));
+
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease,
+    filter 0.3s ease;
+}
+
+.project-card__preview-link:hover .project-card__hover-open {
+  opacity: 1;
+}
+
+.project-card__preview-link:hover .project-card__hover-open span {
+  transform: translateX(0px) scale(1);
+}
+
+.project-card__preview-link:hover .project-card__image {
+  transform: scale(1.06);
+
+  filter: saturate(1.2) contrast(1.08) brightness(0.92);
+}
+
+/* =========================================
+   SWIPE HINT
+========================================= */
+
+.project-deck {
+  position: relative;
+  isolation: isolate;
+}
+
+.project-deck::before {
+  content: "";
+
+  position: absolute;
+  top: 47%;
+  right: 2%;
+
+  width: 160px;
+  height: 4px;
+
+  border-radius: 999px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(var(--kyber-rgb), 0.18),
+    rgba(var(--kyber-rgb), 1),
+    rgba(var(--kyber-rgb), 0.18),
+    transparent
+  );
+
+  box-shadow:
+    0 0 18px rgba(var(--kyber-rgb), 0.7),
+    0 0 40px rgba(var(--kyber-rgb), 0.24);
+
+  pointer-events: none;
+
+  z-index: 999;
+
+  animation: swipeLineMove 3.4s ease-in-out infinite;
+}
+
+.project-deck::after {
+  content: "⟵";
+
+  position: absolute;
+  top: calc(47% - 18px);
+  right: calc(2% + 6px);
+
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 36px;
+  height: 36px;
+
+  color: rgba(var(--kyber-rgb), 0.92);
+
+  font-size: 1.4rem;
+  font-weight: 300;
+  line-height: 1;
+
+  pointer-events: none;
+
+  text-shadow:
+    0 0 8px rgba(var(--kyber-rgb), 0.75),
+    0 0 18px rgba(var(--kyber-rgb), 0.42);
+
+  filter: drop-shadow(0 0 10px rgba(var(--kyber-rgb), 0.28));
+
+  animation: swipeArrowMove 3.4s ease-in-out infinite;
+}
+
+@keyframes swipeLineMove {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translateX(0) scaleX(0.75);
+  }
+
+  24% {
+    opacity: 0.42;
+  }
+
+  55% {
+    opacity: 0.28;
+    transform: translateX(-72px) scaleX(1);
+  }
+
+  76% {
+    opacity: 0;
+    transform: translateX(-110px) scaleX(0.82);
+  }
+}
+
+@keyframes swipeArrowMove {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translateX(0) scale(0.72);
+  }
+
+  24% {
+    opacity: 0.88;
+  }
+
+  55% {
+    opacity: 0.4;
+    transform: translateX(-72px) scale(1.08);
+  }
+
+  76% {
+    opacity: 0;
+    transform: translateX(-110px) scale(0.9);
+  }
 }

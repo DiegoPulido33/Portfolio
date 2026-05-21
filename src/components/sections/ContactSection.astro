@@ -1,6 +1,7 @@
 ---
 import { contactContent } from "../../data/contactContent";
 import SectionNavigator from "../sectionNavigator.astro";
+
 const {
   eyebrow,
   title,
@@ -22,7 +23,46 @@ const {
       <p class="contact-header__intro">{intro}</p>
     </header>
 
-    <div class="contact-layout">
+    <div class="contact-form-shell">
+      <div class="contact-form-copy">
+        <span>Contacto directo</span>
+        <h2>Envíame una consulta</h2>
+        <p>
+          Si tienes una oportunidad, proyecto o conversación profesional
+          interesante, puedes escribirme desde este formulario.
+        </p>
+      </div>
+
+      <form class="contact-form" id="contact-form">
+        <div class="contact-form__row">
+          <label>
+            Nombre
+            <input name="name" type="text" required autocomplete="name" />
+          </label>
+
+          <label>
+            Email
+            <input name="email" type="email" required autocomplete="email" />
+          </label>
+        </div>
+
+        <label>
+          Empresa / contexto
+          <input name="company" type="text" autocomplete="organization" />
+        </label>
+
+        <label>
+          Mensaje
+          <textarea name="message" rows="5" required></textarea>
+        </label>
+
+        <button type="submit">Enviar mensaje</button>
+
+        <p class="contact-form__status" id="contact-form-status"></p>
+      </form>
+    </div>
+
+    <div class="contact-layout contact-layout--with-form">
       <aside class="contact-panel">
         <span class="contact-panel__label">{availability.label}</span>
         <strong class="contact-panel__status">{availability.value}</strong>
@@ -68,5 +108,47 @@ const {
       <p>{closingNote}</p>
     </footer>
   </div>
+
   <SectionNavigator current="contact" />
 </section>
+
+<script is:inline>
+  const form = document.getElementById("contact-form");
+  const status = document.getElementById("contact-form-status");
+
+  if (form && status) {
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      status.textContent = "Enviando mensaje...";
+
+      const submitButton = form.querySelector("button");
+      if (submitButton) submitButton.disabled = true;
+
+      const formData = new FormData(form);
+      const payload = Object.fromEntries(formData.entries());
+
+      try {
+        const response = await fetch("/api/contact", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          throw new Error("No se pudo enviar el mensaje.");
+        }
+
+        form.reset();
+        status.textContent = "Mensaje enviado correctamente.";
+      } catch {
+        status.textContent =
+          "No se pudo enviar el mensaje. Puedes contactarme directamente por email.";
+      } finally {
+        if (submitButton) submitButton.disabled = false;
+      }
+    });
+  }
+</script>

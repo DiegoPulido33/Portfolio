@@ -14,6 +14,11 @@ type GalaxyTheme = "dark" | "light";
 let currentTheme: GalaxyTheme = "dark";
 let handleThemeToggleRef: ((event: Event) => void) | null = null;
 
+let handleScrollbarPointerDownRef: ((e: PointerEvent) => void) | null = null;
+let handleScrollbarPointerUpRef: (() => void) | null = null;
+let isScrollbarDragging = false;
+let wasPausedBeforeScrollbarDrag = false;
+
 // === STREAKS ===
 type StreakItem = {
   mesh: THREE.Mesh;
@@ -52,9 +57,9 @@ const HIDDEN_SIMULATION_SCALE = 0.05;
 const CAMERA_LERP_VISIBLE = 0.05;
 const CAMERA_LERP_HIDDEN = 0.02;
 
-const STREAK_POOL_SIZE = 6;
-const MAX_ACTIVE_STREAKS = 4;
-const MAX_OFFLINE_STREAK_CREDIT = 1.25;
+const STREAK_POOL_SIZE = 0;
+const MAX_ACTIVE_STREAKS = 0;
+const MAX_OFFLINE_STREAK_CREDIT = 0.85;
 const STREAK_SPAWN_INTERVAL = 0.95;
 const MAX_SPAWNS_PER_TICK = 1;
 const RETURN_VISIBILITY_COOLDOWN_SECONDS = 0.35;
@@ -116,7 +121,7 @@ export function initGalaxyScene() {
 
   renderer = new THREE.WebGLRenderer({
     canvas,
-    antialias: true,
+    antialias: false,
     alpha: false,
     powerPreference: "high-performance",
   });
@@ -126,9 +131,9 @@ export function initGalaxyScene() {
 
   sharedStarTexture = createStarTexture();
 
-  deepStars = createStarLayer(1400, 1, 0xffffff, sharedStarTexture);
-  mainStars = createStarLayer(700, 2, 0xdcecff, sharedStarTexture);
-  brightStars = createStarLayer(45, 4, 0xbfdcff, sharedStarTexture);
+  deepStars = createStarLayer(1000, 1, 0xffffff, sharedStarTexture);
+  mainStars = createStarLayer(500, 2, 0xdcecff, sharedStarTexture);
+  brightStars = createStarLayer(30, 4, 0xbfdcff, sharedStarTexture);
 
   scene.add(deepStars);
   scene.add(mainStars);
@@ -190,6 +195,44 @@ export function initGalaxyScene() {
     document.documentElement.dataset.theme === "light" ? "light" : "dark";
 
   applyGalaxyTheme(initialTheme);
+
+  handleScrollbarPointerDownRef = (e: PointerEvent) => {
+    const target = e.target as HTMLElement | null;
+    const panel = target?.closest(".section-panel") as HTMLElement | null;
+
+    if (!panel) return;
+
+    const rect = panel.getBoundingClientRect();
+    const scrollbarZone = 18;
+
+    const isOnVerticalScrollbar =
+      e.clientX >= rect.right - scrollbarZone && e.clientX <= rect.right;
+
+    if (!isOnVerticalScrollbar) return;
+
+    isScrollbarDragging = true;
+    wasPausedBeforeScrollbarDrag = isPaused;
+
+    pauseGalaxyScene();
+  };
+
+  handleScrollbarPointerUpRef = () => {
+    if (!isScrollbarDragging) return;
+
+    isScrollbarDragging = false;
+
+    if (!wasPausedBeforeScrollbarDrag) {
+      resumeGalaxyScene();
+    }
+  };
+
+  window.addEventListener("pointerdown", handleScrollbarPointerDownRef, {
+    passive: true,
+  });
+
+  window.addEventListener("pointerup", handleScrollbarPointerUpRef, {
+    passive: true,
+  });
 
   startRenderLoop();
 }
@@ -263,6 +306,16 @@ export function destroyGalaxyScene() {
   if (sharedStarTexture) {
     sharedStarTexture.dispose();
     sharedStarTexture = null;
+  }
+
+  if (handleScrollbarPointerDownRef) {
+    window.removeEventListener("pointerdown", handleScrollbarPointerDownRef);
+    handleScrollbarPointerDownRef = null;
+  }
+
+  if (handleScrollbarPointerUpRef) {
+    window.removeEventListener("pointerup", handleScrollbarPointerUpRef);
+    handleScrollbarPointerUpRef = null;
   }
 
   renderer.dispose();

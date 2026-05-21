@@ -41,14 +41,11 @@ export default function ProjectDeck({ projects }: ProjectDeckProps) {
     );
   }
 
-  function handlePointerDown(event: React.PointerEvent<HTMLDivElement>) {
+  function handlePointerDown(event: React.PointerEvent<HTMLElement>) {
     const target = event.target as HTMLElement;
-
     const isInteractive = target.closest("a") || target.closest("button");
 
-    if (isInteractive) {
-      return;
-    }
+    if (isInteractive) return;
 
     event.currentTarget.setPointerCapture(event.pointerId);
 
@@ -58,7 +55,7 @@ export default function ProjectDeck({ projects }: ProjectDeckProps) {
     }));
   }
 
-  function handlePointerMove(event: React.PointerEvent<HTMLDivElement>) {
+  function handlePointerMove(event: React.PointerEvent<HTMLElement>) {
     if (!drag.isDragging) return;
 
     setDrag((current) => ({
@@ -129,11 +126,15 @@ export default function ProjectDeck({ projects }: ProjectDeckProps) {
           return (
             <article
               key={project.slug}
-              className={`project-card ${isActive ? "project-card--active" : ""}`}
+              className={`project-card ${
+                isActive ? "project-card--active" : ""
+              }`}
               style={{
                 zIndex: 20 - depth,
                 opacity,
-                transform: `translate3d(${translateX}px, ${translateY}px, ${-depth * 70}px) rotateY(${-depth * 8}deg) rotate(${rotate}deg) scale(${scale})`,
+                transform: `translate3d(${translateX}px, ${translateY}px, ${
+                  -depth * 70
+                }px) rotateY(${-depth * 8}deg) rotate(${rotate}deg) scale(${scale})`,
               }}
               onPointerDown={isActive ? handlePointerDown : undefined}
               onPointerMove={isActive ? handlePointerMove : undefined}
@@ -142,19 +143,37 @@ export default function ProjectDeck({ projects }: ProjectDeckProps) {
             >
               <div className="project-card__preview">
                 {project.preview ? (
-                  <img
-                    src={project.preview}
-                    alt={`Preview de ${project.title}`}
-                    className="project-card__image"
-                    draggable={false}
-                  />
+                  <a
+                    className="project-card__preview-link"
+                    href={project.links.live}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`Abrir web de ${project.title}`}
+                    onPointerDown={(event) => {
+                      event.stopPropagation();
+                    }}
+                  >
+                    <img
+                      src={project.preview}
+                      alt={`Preview de ${project.title}`}
+                      className="project-card__image"
+                      draggable={false}
+                    />
+
+                    <div
+                      className="project-card__hover-open"
+                      aria-hidden="true"
+                    >
+                      <span>↗</span>
+                    </div>
+                  </a>
                 ) : (
                   <div className="project-card__orb" />
                 )}
 
                 <div className="project-card__grid" />
                 <div className="project-card__preview-glow" />
-                <span>{project.status}</span>
+                <span className="project-card__status">{project.status}</span>
               </div>
 
               <div className="project-card__body">
@@ -170,7 +189,7 @@ export default function ProjectDeck({ projects }: ProjectDeckProps) {
 
                 <div className="project-card__links">
                   <a href={project.links.live} target="_blank" rel="noreferrer">
-                    LIVE
+                    VIEW LIVE
                   </a>
                   <a href={project.links.repo} target="_blank" rel="noreferrer">
                     GITHUB
