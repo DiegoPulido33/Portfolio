@@ -3,6 +3,22 @@ import type { APIRoute } from "astro";
 const BREVO_API_URL = "https://api.brevo.com/v3/smtp/email";
 const BREVO_CONTACTS_URL = "https://api.brevo.com/v3/contacts";
 
+const json = (data: unknown, status = 200) =>
+  new Response(JSON.stringify(data), {
+    status,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+const escapeHtml = (value: string) =>
+  value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+
 export const POST: APIRoute = async ({ request }) => {
   try {
     const body = await request.json();
@@ -13,10 +29,7 @@ export const POST: APIRoute = async ({ request }) => {
     const message = String(body.message || "").trim();
 
     if (!name || !email || !message) {
-      return new Response(
-        JSON.stringify({ ok: false, error: "Faltan campos obligatorios." }),
-        { status: 400 },
-      );
+      return json({ ok: false, error: "Faltan campos obligatorios." }, 400);
     }
 
     const apiKey = import.meta.env.BREVO_API_KEY;
@@ -25,14 +38,11 @@ export const POST: APIRoute = async ({ request }) => {
     const listId = import.meta.env.BREVO_LIST_ID;
 
     if (!apiKey || !senderEmail || !receiverEmail) {
-      return new Response(
-        JSON.stringify({ ok: false, error: "Configuración incompleta." }),
-        { status: 500 },
-      );
+      return json({ ok: false, error: "Configuración incompleta." }, 500);
     }
 
     if (listId) {
-      await fetch(BREVO_CONTACTS_URL, {
+      const contactResponse = await fetch(BREVO_CONTACTS_URL, {
         method: "POST",
         headers: {
           "api-key": apiKey,
@@ -42,22 +52,31 @@ export const POST: APIRoute = async ({ request }) => {
           email,
           attributes: {
             FIRSTNAME: name,
-            COMPANY: company,
+            COMPANY: company || undefined,
           },
           listIds: [Number(listId)],
           updateEnabled: true,
         }),
       });
+
+      if (!contactResponse.ok) {
+        console.warn("Brevo contact sync failed:", await contactResponse.text());
+      }
     }
+
+    const safeName = escapeHtml(name);
+    const safeEmail = escapeHtml(email);
+    const safeCompany = escapeHtml(company || "No indicada");
+    const safeMessage = escapeHtml(message).replaceAll("\n", "<br />");
 
     const htmlContent = `
       <h2>Nueva consulta desde el portfolio</h2>
-      <p><strong>Nombre:</strong> ${name}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Empresa:</strong> ${company || "No indicada"}</p>
+      <p><strong>Nombre:</strong> ${safeName}</p>
+      <p><strong>Email:</strong> ${safeEmail}</p>
+      <p><strong>Empresa:</strong> ${safeCompany}</p>
       <hr />
       <p><strong>Mensaje:</strong></p>
-      <p>${message.replace(/\n/g, "<br />")}</p>
+      <p>${safeMessage}</p>
     `;
 
     const brevoResponse = await fetch(BREVO_API_URL, {
@@ -87,17 +106,13 @@ export const POST: APIRoute = async ({ request }) => {
     });
 
     if (!brevoResponse.ok) {
-      return new Response(
-        JSON.stringify({ ok: false, error: "Brevo no pudo enviar el email." }),
-        { status: 502 },
-      );
+      console.error("Brevo email failed:", await brevoResponse.text());
+      return json({ ok: false, error: "Brevo no pudo enviar el email." }, 502);
     }
 
-    return new Response(JSON.stringify({ ok: true }), { status: 200 });
-  } catch {
-    return new Response(
-      JSON.stringify({ ok: false, error: "Error inesperado." }),
-      { status: 500 },
-    );
+    return json({ ok: true });
+  } catch (error) {
+    console.error("Contact API error:", error);
+    return json({ ok: false, error: "Error inesperado." }, 500);
   }
 };
