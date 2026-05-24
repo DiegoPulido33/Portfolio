@@ -1,4 +1,4 @@
-# Diego Pulido — Immersive Developer Portfolio
+# Diego Pulido Rivero— Immersive Developer Portfolio
 
 An immersive sci-fi inspired developer portfolio built with Astro, React and Three.js.
 
