@@ -99,7 +99,7 @@ function handleMouseMove(e: MouseEvent) {
   lastX = e.clientX;
   lastY = e.clientY;
 
-  const intensity = Math.min(speed * 1.3, 1);
+  const intensity = Math.min(speed * 1.28, 1);
 
   humGain.gain.setTargetAtTime(
     0.08 + intensity * 0.1,
