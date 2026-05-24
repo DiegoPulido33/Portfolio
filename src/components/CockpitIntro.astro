@@ -8,6 +8,12 @@
   <div class="cockpit-intro__hint">Click to continue</div>
 </div>
 
+<div class="cockpit-intro__image" id="cockpit-intro-image"></div>
+<div class="cockpit-intro__depth"></div>
+<div class="cockpit-intro__particles"></div>
+<div class="cockpit-intro__reflections"></div>
+<div class="cockpit-intro__glass"></div>
+
 <style>
   /* =========================================================
      CUSTOM PROPERTY PARA LA MÁSCARA DE REVEAL
@@ -101,15 +107,16 @@
      IMAGEN PRINCIPAL DEL COCKPIT
   ========================================================= */
   .cockpit-intro__image {
-    background-image: url("/intro/cockpit-intro.webp");
-    background-size: auto 105vh;
-    background-position: center center;
-    background-repeat: no-repeat;
-    transform-origin: 50% 50%;
-    will-change: transform;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-  }
+  background-image: url("/intro/cockpit-intro.webp");
+  background-size: auto 108vh;
+  background-position: center center;
+  background-repeat: no-repeat;
+  transform-origin: 50% 50%;
+  will-change: transform, filter;
+  filter: contrast(1.08) saturate(1.08) brightness(0.9);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
 
   /* =========================================================
      CAPA GLASS / HUD
@@ -326,6 +333,74 @@
       top: 64%;
     }
   }
+
+  .cockpit-intro__depth,
+.cockpit-intro__particles,
+.cockpit-intro__reflections {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.cockpit-intro__depth {
+  z-index: 1;
+  background:
+    radial-gradient(circle at 50% 52%, rgba(80, 190, 255, 0.14), transparent 22%),
+    radial-gradient(circle at 50% 50%, transparent 35%, rgba(0, 0, 0, 0.62) 78%, rgba(0, 0, 0, 0.96) 100%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.72), transparent 22%, transparent 78%, rgba(0, 0, 0, 0.72));
+  mix-blend-mode: screen;
+}
+
+.cockpit-intro__particles {
+  z-index: 2;
+  opacity: 0.42;
+  background-image:
+    radial-gradient(circle, rgba(180, 230, 255, 0.9) 0 1px, transparent 1.5px),
+    radial-gradient(circle, rgba(255, 255, 255, 0.7) 0 1px, transparent 1.6px);
+  background-size: 180px 180px, 260px 260px;
+  background-position: 20px 30px, 90px 120px;
+  animation: cockpitParticlesFloat 18s linear infinite;
+}
+
+@keyframes cockpitParticlesFloat {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(-40px, 26px, 0) scale(1.04);
+  }
+}
+
+.cockpit-intro__reflections {
+  z-index: 3;
+  opacity: 0.34;
+  background:
+    linear-gradient(115deg, transparent 0%, transparent 30%, rgba(255,255,255,0.16) 36%, transparent 43%),
+    linear-gradient(65deg, transparent 0%, transparent 58%, rgba(120,210,255,0.12) 64%, transparent 72%);
+  mix-blend-mode: screen;
+  animation: cockpitReflectionDrift 9s ease-in-out infinite alternate;
+}
+
+@keyframes cockpitReflectionDrift {
+  from {
+    transform: translate3d(-18px, 0, 0);
+    opacity: 0.22;
+  }
+  to {
+    transform: translate3d(24px, -10px, 0);
+    opacity: 0.42;
+  }
+}
+
+.cockpit-intro__glass {
+  z-index: 4;
+  background:
+    linear-gradient(rgba(120, 220, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120, 220, 255, 0.035) 1px, transparent 1px);
+  background-size: 100% 72px, 92px 100%;
+  opacity: 0.32;
+  mask-image: radial-gradient(circle at center, transparent 0%, black 48%, black 100%);
+}
 </style>
 
 <script>
