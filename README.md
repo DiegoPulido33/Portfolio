@@ -205,6 +205,9 @@ Frontend & Full Stack Developer specialized in:
 ### GitHub
 https://github.com/DiegoPulido33
 
+### Linkedin
+https://www.linkedin.com/in/diegopulidorivero
+
 ### Portfolio
 https://portfoliodpr.vercel.app
 
