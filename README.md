@@ -8,7 +8,7 @@ Designed as an interactive command hub rather than a traditional portfolio, this
 
 ## Live Demo
 
-https://portfoliodpr.vercel.app
+https://portfolio.puvero.es
 
 ---
 
