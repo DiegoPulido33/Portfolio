@@ -70,7 +70,7 @@ export const projectsContent = {
                 "Forms",
             ],
             links: {
-                live: "https://luxurymotors.vercel.app/",
+                live: "https://luxury-motors.puvero.es/",
                 repo: "https://github.com/DiegoPulido33/TFG-Luxury",
             },
         },
@@ -111,7 +111,7 @@ export const projectsContent = {
             ],
 
             links: {
-                live: "https://cinesdpr.vercel.app/",
+                live: "https://cine.puvero.es/",
                 repo: "https://github.com/DiegoPulido33/cine",
             },
         }
