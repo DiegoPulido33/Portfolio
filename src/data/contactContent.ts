@@ -37,7 +37,7 @@ export const contactContent = {
     {
       label: "CV",
       value: "Currículum tradicional en PDF",
-      href: "/cv/diego-pulido-cv.pdf",
+      href: "/cv/diego-pulido-rivero-cv.pdf",
       action: "Descargar CV",
     },
     {

@@ -3,8 +3,14 @@ import { projectsContent } from "../../data/projectsContent";
 import SectionNavigator from "../sectionNavigator.astro";
 import ProjectDeck from "./projectDeck";
 
-const { eyebrow, title, intro, featuredProjects, sectionNote } =
-  projectsContent;
+const {
+  eyebrow,
+  title,
+  intro,
+  featuredProjects,
+  enterpriseProjects,
+  sectionNote,
+} = projectsContent;
 ---
 
 <section
@@ -21,6 +27,19 @@ const { eyebrow, title, intro, featuredProjects, sectionNote } =
 
     <div class="section-zone__content projects-zone__content">
       <ProjectDeck client:load projects={featuredProjects} />
+      <div class="projects-zone__divider">
+        <span>Enterprise / Internal Systems</span>
+        <p>
+          Herramientas internas desarrolladas en entorno profesional. No se
+          muestran datos, código ni capturas por confidencialidad.
+        </p>
+      </div>
+
+      <ProjectDeck
+        client:load
+        projects={enterpriseProjects}
+        label="Enterprise / Internal Systems"
+      />
     </div>
 
     <footer class="section-zone__footer projects-footer">

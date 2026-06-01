@@ -116,6 +116,68 @@ export const projectsContent = {
             },
         }
     ],
+    enterpriseProjects: [
+        {
+            slug: "ticket-analytics-platform",
+            title: "Ticket Analytics Platform",
+            category: "Enterprise Internal System / Operations",
+            status: "Internal",
+            summary:
+                "Panel interno para consulta histórica, análisis y seguimiento operativo de tickets, orientado a mejorar la visibilidad de incidencias, estados, agentes y flujos de soporte.",
+            problem:
+                "Los equipos necesitaban consultar información histórica de tickets de forma más rápida y estructurada, evitando búsquedas manuales y dispersión de datos.",
+            solution:
+                "Desarrollo de una interfaz interna conectada a datos operativos, con filtros, vistas históricas y consultas SQL optimizadas para análisis y seguimiento.",
+            impact: [
+                "Mejora la consulta y trazabilidad de tickets.",
+                "Reduce dependencia de procesos manuales.",
+                "Facilita análisis operativo sobre histórico de soporte.",
+                "Demuestra experiencia real con herramientas internas de empresa.",
+            ],
+            stack: ["SQL", "JavaScript", "Backend", "Dashboards", "Internal Tools"],
+            confidential: true,
+        },
+        {
+            slug: "inventory-management-portal",
+            title: "Inventory Management Portal",
+            category: "Enterprise Internal System / Inventory",
+            status: "Internal",
+            summary:
+                "Portal interno de inventario para gestión, consulta y organización de activos, diseñado para centralizar información operativa y facilitar el trabajo de equipos internos.",
+            problem:
+                "La gestión de inventario necesitaba una interfaz más clara, centralizada y consultable para evitar pérdida de tiempo y duplicidad de información.",
+            solution:
+                "Construcción de un portal interno con vistas estructuradas, filtros y componentes reutilizables para consultar y gestionar información de inventario.",
+            impact: [
+                "Centraliza información interna crítica.",
+                "Mejora la velocidad de consulta.",
+                "Reduce fricción en procesos operativos.",
+                "Refuerza experiencia en software empresarial real.",
+            ],
+            stack: ["Frontend", "Backend", "SQL", "Internal Systems", "UX"],
+            confidential: true,
+        },
+        {
+            slug: "internal-support-chatbot",
+            title: "Internal Support Chatbot",
+            category: "AI Assistant / Internal Automation",
+            status: "Internal",
+            summary:
+                "Chatbot interno orientado a soporte y consulta de información operativa, pensado para acelerar respuestas, reducir carga manual y mejorar acceso al conocimiento interno.",
+            problem:
+                "Parte del conocimiento operativo estaba disperso, haciendo que determinadas consultas internas dependieran de búsquedas manuales o de otras personas.",
+            solution:
+                "Implementación de un asistente conversacional conectado a flujos internos y documentación operativa para responder consultas frecuentes y apoyar procesos.",
+            impact: [
+                "Acelera el acceso a información interna.",
+                "Reduce tareas repetitivas.",
+                "Introduce automatización con IA en procesos reales.",
+                "Demuestra capacidad para integrar soluciones AI en entorno empresarial.",
+            ],
+            stack: ["AI", "Chatbot", "Automation", "APIs", "Internal Tools"],
+            confidential: true,
+        },
+    ],
 
     sectionNote:
         "Cada proyecto debe poder entenderse en menos de un minuto, pero dejar claro que detrás hay criterio, decisiones y capacidad real de entrega.",

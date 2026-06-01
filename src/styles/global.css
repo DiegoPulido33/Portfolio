@@ -7,9 +7,24 @@
 
 @custom-variant dark (&:is(.dark *));
 
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 /* Ocultar cursor normal */
 body {
   cursor: none !important;
+}
+
+#__next,
+#root,
+main {
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 .kyber-menu,
@@ -206,6 +221,11 @@ body {
   html {
     @apply font-sans;
   }
+}
+
+/* Evita scroll horizontal inesperado */
+html, body {
+  overflow-x: hidden;
 }
 
 html[data-theme="light"] body {

@@ -13,17 +13,19 @@ type Project = {
   solution: string;
   impact: string[];
   stack: string[];
-  links: {
-    live: string;
-    repo: string;
+  confidential?: boolean;
+  links?: {
+    live?: string;
+    repo?: string;
   };
 };
 
 type ProjectDeckProps = {
   projects: Project[];
+  label?: string;
 };
 
-export default function ProjectDeck({ projects }: ProjectDeckProps) {
+export default function ProjectDeck({ projects, label }: ProjectDeckProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [drag, setDrag] = useState({ x: 0, y: 0, isDragging: false });
 
@@ -86,7 +88,7 @@ export default function ProjectDeck({ projects }: ProjectDeckProps) {
     <div className="project-deck">
       <div className="project-deck__left">
         <div className="project-deck__status">
-          <span>ACTIVE FILE</span>
+          <span>{label ?? "ACTIVE FILE"}</span>{" "}
           <strong>
             {String(activeIndex + 1).padStart(2, "0")} /{" "}
             {String(projects.length).padStart(2, "0")}
@@ -145,7 +147,7 @@ export default function ProjectDeck({ projects }: ProjectDeckProps) {
                 {project.preview ? (
                   <a
                     className="project-card__preview-link"
-                    href={project.links.live}
+                    href={project.links?.live}
                     target="_blank"
                     rel="noreferrer"
                     aria-label={`Abrir web de ${project.title}`}
@@ -188,12 +190,16 @@ export default function ProjectDeck({ projects }: ProjectDeckProps) {
                 </div>
 
                 <div className="project-card__links">
-                  <a href={project.links.live} target="_blank" rel="noreferrer">
-                    VIEW LIVE
-                  </a>
-                  <a href={project.links.repo} target="_blank" rel="noreferrer">
-                    GITHUB
-                  </a>
+                  {project.links?.live && (
+                    <a href={project.links.live} target="_blank" rel="noreferrer">
+                      VIEW LIVE
+                    </a>
+                  )}
+                  {project.links?.repo && (
+                    <a href={project.links.repo} target="_blank" rel="noreferrer">
+                      GITHUB
+                    </a>
+                  )}
                 </div>
               </div>
             </article>
