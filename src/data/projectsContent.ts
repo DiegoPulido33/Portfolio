@@ -45,7 +45,7 @@ export const projectsContent = {
             title: "Luxury Motors",
             category: "Full-Stack Web App / Automotive E-commerce",
             status: "Completed",
-            preview: "/projects/luxury-motors.jpg",
+            preview: "/projects/luxury-motors.webp",
             summary:
                 "Aplicación web full-stack desarrollada como TFG, enfocada en un concesionario premium de vehículos de lujo con inventario dinámico, fichas detalladas y formularios de compra, alquiler y reserva.",
             problem:
@@ -83,7 +83,7 @@ export const projectsContent = {
 
             status: "Completed",
 
-            preview: "/projects/cinesdpr.jpg",
+            preview: "/projects/cinesdpr.webp",
 
             summary:
                 "Aplicación frontend desarrollada en Angular para consultar una cartelera de cine, evolucionada desde un ejercicio académico hasta convertirse en una experiencia web más completa, visual y estructurada.",
